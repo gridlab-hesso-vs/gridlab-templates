@@ -86,7 +86,8 @@ theme in `./gridlab`.
 `demo/demo.pdf` is a 14-slide tour: title page, section dividers and closing
 slide, blocks and columns, the maths and text helpers, the plot and phasor
 environments, the flowchart styles. Each slide names the macro that produced
-it, and most show the source next to the result.
+it, and the macros are listed in tables pairing each command with what it
+produces.
 
 ## Customise
 

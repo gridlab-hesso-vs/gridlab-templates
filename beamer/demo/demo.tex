@@ -109,25 +109,24 @@
 
 \begin{frame}[fragile]{Text}
   \watermark{DRAFT}{8}
-  \begin{columns}[T,onlytextwidth]
-    \begin{column}{0.5\textwidth}
-      Quotations: \say{the grid is a queue with physics}
-
-      \medskip
-      Open questions: \todo{add the 2026 measurements}
-
-      \medskip
-      And this slide carries a watermark.
-    \end{column}
-    \begin{column}{0.46\textwidth}
-      \footnotesize
-\begin{verbatim}
-\say{the grid is a queue with physics}
-\todo{add the 2026 measurements}
-\watermark{DRAFT}{8}
-\end{verbatim}
-    \end{column}
-  \end{columns}
+  \centering
+  \small
+  \renewcommand{\arraystretch}{1.5}
+  \begin{tabular}{@{}l@{\qquad}l@{\qquad}l@{}}
+    \toprule
+    \textbf{Result} & \textbf{Command} & \textbf{For} \\
+    \midrule
+    \say{a queue with physics}
+      & \verb|\say{a queue with physics}|
+      & quotation marks \\
+    \todo{add the 2026 data}
+      & \verb|\todo{add the 2026 data}|
+      & a visible reminder \\
+    the mark behind this table
+      & \verb|\watermark{DRAFT}{8}|
+      & text, scale \\
+    \bottomrule
+  \end{tabular}
 \end{frame}
 
 % ==========================================================================
@@ -138,30 +137,41 @@
   \begin{columns}[T,onlytextwidth]
     \begin{column}{0.48\textwidth}
       \centering
-      \begin{q1simpleplot}{0.92\textwidth}{0.45\textheight}{$x$}{$y$}
+      \begin{q1simpleplot}{0.92\textwidth}{0.36\textheight}{$x$}{$y$}
         \addplot[domain=0:1, samples=40, thick, color=primary] {x^2};
         \addplanelabel{0.1,0.72}{$y=x^2$}{anchor=west}
       \end{q1simpleplot}
 
-      {\footnotesize \verb|q1simpleplot{w}{h}{$x$}{$y$}| — axes through the
-       origin, labels at the arrow tips, no ticks to read. Text in the plot
-       uses \verb|\plotfont|, \verb|\small| by default.}
     \end{column}
     \begin{column}{0.48\textwidth}
       \centering
       {\renewcommand{\plotfont}{\tiny}%
-      \begin{plot}{0.92\textwidth}{0.45\textheight}{-2}{2}{-2}{2}{1}{$P$}{$Q$}
+      \begin{plot}{0.92\textwidth}{0.36\textheight}{-2}{2}{-2}{2}{1}{$P$}{$Q$}
         \vectorarrow{0,0}{1.4,1.2}{$\bar S$}
       \end{plot}}
 
-      {\footnotesize \verb|plot{w}{h}{xmin}{xmax}{ymin}{ymax}| \verb|{step}{$P$}{$Q$}|,
-       with \verb|\vectorarrow| between two axis coordinates. This one is
-       shrunk further by \verb|\renewcommand{\plotfont}{\tiny}|.}
     \end{column}
   \end{columns}
+
+  \vspace{0.1em}
+  \centering
+  \footnotesize
+  \renewcommand{\arraystretch}{1.15}
+  \begin{tabular}{@{}l@{\qquad}l@{}}
+    \toprule
+    \textbf{Command} & \textbf{For} \\
+    \midrule
+    \verb|q1simpleplot{w}{h}{$x$}{$y$}| & first quadrant, left above \\
+    \verb|q1q2simpleplot{w}{h}{$x$}{$y$}| & first and second quadrant \\
+    \verb|plot{w}{h}{xmin}{xmax}{ymin}{ymax}{step}{$x$}{$y$}| & any range, right above \\
+    \verb|\vectorarrow{0,0}{1.4,1.2}{$\bar S$}| & arrow between axis coordinates \\
+    \verb|\addplanelabel{0.1,0.72}{$y=x^2$}{anchor=west}| & a label at a coordinate \\
+    \verb|\renewcommand{\plotfont}{\tiny}| & text size, \verb|\small| by default \\
+    \bottomrule
+  \end{tabular}
 \end{frame}
 
-\begin{frame}{Complex plane}
+\begin{frame}[fragile]{Complex plane}
   \begin{columns}[T,onlytextwidth]
     \begin{column}{0.5\textwidth}
       \centering
@@ -179,8 +189,17 @@
     \end{column}
   \end{columns}
   \vspace{0.4em}
-  {\footnotesize Left: \texttt{phasorbox}, gridded with labelled axes.
-   Right: \texttt{phasorbox\_clean}, the same without them.}
+  \centering
+  \footnotesize
+  \renewcommand{\arraystretch}{1.25}
+  \begin{tabular}{@{}l@{\qquad}l@{}}
+    \toprule
+    \textbf{Command} & \textbf{For} \\
+    \midrule
+    \verb|phasorbox{w}{h}| & gridded, labelled axes — left \\
+    \verb|phasorbox_clean{w}{h}{xmin}{xmax}{ymin}{ymax}| & no axes at all — right \\
+    \bottomrule
+  \end{tabular}
 \end{frame}
 
 \begin{frame}{Flowcharts}
@@ -207,33 +226,30 @@
 % ==========================================================================
 
 \begin{frame}[fragile]{Colours and logos}
-  \begin{columns}[T,onlytextwidth]
-    \begin{column}{0.52\textwidth}
-      \footnotesize
-\begin{verbatim}
-\def\themeprimary{376092}    % main
-\def\themesecondary{ED7D31}  % accent
-\usetheme{gridlab}
-\end{verbatim}
-      \normalsize
-      Set before the theme is loaded; every title bar, divider, bullet and
-      block follows.
-    \end{column}
-    \begin{column}{0.44\textwidth}
-      \footnotesize
-\begin{verbatim}
-\def\titlelogos{...}
-\def\titlebottomlogo{logo.png}
-\def\cornerlogo{logo.png}
-\end{verbatim}
-      \normalsize
-      Logos default to the ones shipped with the theme; override them, or set
-      one empty to switch it off.
-    \end{column}
-  \end{columns}
-  \vfill
-  {\footnotesize Start a presentation from \texttt{../main.tex}; the theme
-   itself is \texttt{../gridlab/beamerthemegridlab.sty}.}
+  \centering
+  \footnotesize
+  \renewcommand{\arraystretch}{1.35}
+  \begin{tabular}{@{}l@{\qquad}l@{}}
+    \toprule
+    \textbf{Command} & \textbf{Changes} \\
+    \midrule
+    \verb|\def\themeprimary{376092}| & main colour \emph{(before the theme is loaded)} \\
+    \verb|\def\themesecondary{ED7D31}| & accent colour \emph{(idem)} \\
+    \midrule
+    \verb|\def\titlelogos{...}| & logo row on the title page \\
+    \verb|\def\titlebottomlogo{logo.png}| & title page, bottom right \\
+    \verb|\def\cornerlogo{logo.png}| & every content slide, bottom right \\
+    \verb|\def\closingleftlogo{logo.png}| & closing slide, bottom left \\
+    \midrule
+    \verb|\def\closingtitle{Thank you}| & closing slide headline \\
+    \verb|\def\closingnote{Questions?}| & a line under it \\
+    \bottomrule
+  \end{tabular}
+
+  \vspace{0.5em}
+  {\footnotesize Set a logo macro empty to switch that logo off. Start a
+   presentation from \texttt{../main.tex}; the theme itself is
+   \texttt{../gridlab/beamerthemegridlab.sty}.}
 \end{frame}
 
 % Closing slide: headline, then \author and \institute, framed like the title

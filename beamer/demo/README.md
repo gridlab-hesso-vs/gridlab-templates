@@ -1,8 +1,8 @@
 # Demo
 
 `demo.tex` is a presentation about the theme: 14 slides, each showing one
-feature and naming the macro behind it, most with the source next to the
-result. `demo.pdf` is the compiled version, kept in the repo so it can be
+feature and naming the macro behind it. The maths, text, plot and
+customisation slides are tables pairing every command with its result. `demo.pdf` is the compiled version, kept in the repo so it can be
 read without a TeX installation.
 
 Covered: title page, section dividers, `\topicslide` and `\closingslide`,
