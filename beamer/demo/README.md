@@ -1,15 +1,16 @@
 # Demo
 
-`demo.tex` is a presentation about the theme: 18 slides, each showing one
+`demo.tex` is a presentation about the theme: 13 slides, each showing one
 feature and naming the macro behind it, most with the source next to the
 result. `demo.pdf` is the compiled version, kept in the repo so it can be
 read without a TeX installation.
 
 Covered: title page and section dividers, `\topicslide`, blocks and columns,
-`fitemize`, the maths helpers (`\const`, `\uunderbrace`, `\vvector`,
-`\phase`), the text helpers (`\say`, `\todo`, `\LANG`, `\watermark`), the plot
+the maths helpers (`\const`, `\uunderbrace`, `\vvector`, `\phase`,
+`\cancel`), the text helpers (`\say`, `\todo`, `\watermark`), the plot
 environments (`q1simpleplot`, `plot`, `phasorbox`, `phasorbox_clean`,
-`\vectorarrow`, `\addplanelabel`), the TikZ flowchart styles, and rebranding.
+`\vectorarrow`, `\addplanelabel`), the TikZ flowchart styles, and the colour
+and logo settings.
 
 ## Build
 

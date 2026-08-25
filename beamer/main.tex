@@ -60,9 +60,6 @@
   \titlepage
 \end{frame}
 
-% Legacy alternative still works:
-% \titleslide{Alternative Title}
-
 % ---- Optional table of contents ------------------------------------------
 \begin{frame}{Outline}
   \tableofcontents
@@ -81,7 +78,7 @@
         \item A supporting sub-point
         \item Another supporting detail
       \end{itemize}
-    \item A closing point with a custom constant: $\const{SOC}$
+    \item A closing point with an upright constant: $\const{SOC}$
   \end{itemize}
 \end{frame}
 
@@ -100,22 +97,24 @@
   \end{columns}
 \end{frame}
 
-\section{Compatibility examples}
-
-\begin{frame}{Filled list and math helpers}
-  \begin{fitemize}
-    \item Legacy \texttt{fitemize} still works.
-    \item Legacy underbrace: $\uunderbrace{x+y}{sum}$.
-    \item Steinmetz notation still works: $230\phase{30^\circ}$.
-  \end{fitemize}
-\end{frame}
-
-\begin{frame}{A simple custom plot}
-  \centering
-  \begin{q1simpleplot}{0.55\textwidth}{0.45\textheight}{$x$}{$y$}
-    \addplot[domain=0:1, samples=20] {x^2};
-    \addplanelabel{0.65,0.45}{\scriptsize $y=x^2$}{anchor=west}
-  \end{q1simpleplot}
+\begin{frame}{A figure beside text}
+  \begin{columns}[c,onlytextwidth]
+    \begin{column}{0.52\textwidth}
+      \begin{itemize}
+        \item The plot environments come from the theme; this one is
+              \texttt{q1simpleplot}.
+        \item \texttt{demo/demo.pdf} shows the others, and the maths, text
+              and diagram macros.
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.44\textwidth}
+      \centering
+      \begin{q1simpleplot}{0.95\textwidth}{0.45\textheight}{$x$}{$y$}
+        \addplot[domain=0:1, samples=40, thick, color=primary] {x^2};
+        \addplanelabel{0.62,0.5}{\scriptsize $y=x^2$}{anchor=west}
+      \end{q1simpleplot}
+    \end{column}
+  \end{columns}
 \end{frame}
 
 \begin{frame}{Closing}
