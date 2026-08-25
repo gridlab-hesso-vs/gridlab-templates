@@ -289,6 +289,48 @@
   \endgroup
 }
 
+% Closing slide: \closingslide  or  \closingslide[Merci de votre attention !]
+% Headline, then the author and institute set with \author and \institute,
+% framed like the title page. Customise the defaults with
+%     \def\closingtitle{Thank you}          % the headline
+%     \def\closingnote{Questions?}          % an extra line underneath
+\providecommand{\closingtitle}{Thank you for your attention}
+\providecommand{\closingnote}{}
+\newcommand{\closingslide}[1][\closingtitle]{%
+  \begin{frame}[plain,noframenumbering]
+    \begin{tikzpicture}[remember picture,overlay]
+      \fill[primary] (current page.north west) rectangle ([yshift=-0.7cm]current page.north east);
+      \fill[secondary] ([yshift=-0.7cm]current page.north west) rectangle ([yshift=-0.78cm]current page.north east);
+      \fill[primary] (current page.south west) rectangle ([yshift=0.35cm]current page.south east);
+    \end{tikzpicture}%
+    \ifdefempty{\titlelogos}{}{%
+      \vspace{0.9cm}
+      \hbox to \linewidth{\titlelogos}\par
+    }
+    \vfill
+    \centering
+    {\usebeamerfont{title}\color{primary}#1\par}
+    \vspace{0.4em}
+    {\color{secondary}\rule{0.32\textwidth}{1.3pt}}\par
+    \vspace{1.0em}
+    {\usebeamerfont{author}\insertauthor\par}
+    \vspace{0.35em}
+    {\usebeamerfont{institute}\color{subtle}\insertinstitute\par}
+    \ifdefempty{\closingnote}{}{%
+      \vspace{0.9em}
+      {\usebeamerfont{date}\color{subtle}\closingnote\par}
+    }
+    \vfill
+    \ifdefempty{\titlebottomlogo}{}{%
+      \begin{tikzpicture}[remember picture,overlay]
+        \node[anchor=south east,inner sep=0pt]
+          at ([xshift=\titlebottomlogox,yshift=0.85cm]current page.south east)
+          {\includegraphics[height=\titlebottomlogoheight,keepaspectratio]{\titlebottomlogo}};
+      \end{tikzpicture}%
+    }
+  \end{frame}%
+}
+
 % ---- Filled lists (items spread to fill the frame) -------------------------
 \providecommand{\ifill}{\setlength{\itemsep}{\fill}}
 \newenvironment{fitemize}{\begin{itemize}\setlength{\itemsep}{\fill}}{\end{itemize}}

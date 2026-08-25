@@ -61,6 +61,8 @@
         \item \texttt{fitemize} and \texttt{fenumerate} spread their items
               over the whole frame
         \item \texttt{\textbackslash cornerlogo} puts a logo on every slide
+        \item \texttt{\textbackslash closingslide} ends the deck — last slide
+              here
       \end{itemize}
     \end{column}
   \end{columns}
@@ -234,5 +236,10 @@ $\cancel{x}$
   {\footnotesize Start a presentation from \texttt{../main.tex}; the theme
    itself is \texttt{../gridlab/beamerthemegridlab.sty}.}
 \end{frame}
+
+% Closing slide: headline, then \author and \institute, framed like the title
+% page. \closingtitle sets the headline, \closingnote adds a line under it.
+\def\closingnote{Slides and theme: \texttt{gridlab-templates/beamer}}
+\closingslide
 
 \end{document}

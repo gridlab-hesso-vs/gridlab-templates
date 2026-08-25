@@ -83,10 +83,10 @@ theme in `./gridlab`.
 
 ## What the theme provides
 
-`demo/demo.pdf` is a 13-slide tour: title page and section dividers, blocks
-and columns, the maths and text helpers, the plot and phasor environments,
-the flowchart styles. Each slide names the macro that produced it, and most
-show the source next to the result.
+`demo/demo.pdf` is a 14-slide tour: title page, section dividers and closing
+slide, blocks and columns, the maths and text helpers, the plot and phasor
+environments, the flowchart styles. Each slide names the macro that produced
+it, and most show the source next to the result.
 
 ## Customise
 
@@ -95,6 +95,15 @@ Colours, set before the theme is loaded (hex, no `#`):
 ```latex
 \def\themeprimary{376092}     % main colour
 \def\themesecondary{ED7D31}   % accent colour
+```
+
+The closing slide is `\closingslide`, placed outside any frame. It shows a
+headline and the `\author` and `\institute` from the title block:
+
+```latex
+\def\closingtitle{Thank you}     % headline for the whole deck
+\def\closingnote{Questions?}     % an extra line underneath
+\closingslide                    % or \closingslide[Merci !] for one slide
 ```
 
 Logos default to HES-SO on the title row and GridLab bottom right. Override
