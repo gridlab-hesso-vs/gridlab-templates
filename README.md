@@ -1,7 +1,7 @@
 # GridLab document templates
 
 ___
-**Institutional use only** This template is intended for use by authorized members of the Gridlab HES-SO Valais. The institutional name, logo, and other brand assets remain the property of the lab and may not be used without authorization.
+**Institutional use only** These templates are intended for use by authorized members of the Gridlab HES-SO Valais. The institutional name, logo, and other brand assets remain the property of the lab and may not be used without authorization.
 ___
 
 Templates for GridLab / HES-SO Valais-Wallis documents.
