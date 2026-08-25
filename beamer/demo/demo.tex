@@ -1,0 +1,343 @@
+% ===========================================================================
+%  demo.tex — feature tour of the GridLab Beamer theme.
+%
+%  Every slide names the macro that produced it, so this doubles as a
+%  reference for what the theme offers beyond plain Beamer.
+%  Build with ../make-build.sh, or: pdflatex demo.tex (twice).
+%
+%  To start a real presentation, copy ../main.tex — not this file.
+% ===========================================================================
+\documentclass[aspectratio=169,11pt]{beamer}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{graphicx}
+\usepackage{booktabs}
+
+% The demo sits one level below the package, so it points up at it.
+% A real presentation uses the \IfFileExists form shown in ../main.tex.
+\usepackage{../gridlab/beamerthemegridlab}
+
+\def\EN{}   % enables the English branch of \LANG
+
+\title{The GridLab Beamer theme}
+\subtitle{A tour of what the theme gives you}
+\author{Prof. Fabrizio Sossan}
+\institute{Gridlab, HES-SO Valais-Wallis\\fabrizio.sossan@hevs.ch}
+\date{{\footnotesize Slides compiled on: \today}}
+\renewcommand{\insertshortauthor}{F. Sossan}
+\renewcommand{\insertshorttitle}{Theme feature tour}
+
+\begin{document}
+
+% ---- Title page: logos, colour bars, accent rule — all from the theme -----
+\begin{frame}[plain,noframenumbering]
+  \titlepage
+\end{frame}
+
+\begin{frame}{What this deck is}
+  \begin{itemize}
+    \item Every slide here shows a feature of \texttt{beamerthemegridlab.sty}
+          and names the macro behind it.
+    \item The title page you just saw, this title bar, the footer and the
+          section dividers come from the theme — no setup in the
+          \texttt{.tex} file.
+    \item \alert{Highlighted text} uses the accent colour; the theme ships
+          GridLab blue and orange and both are one line to change.
+  \end{itemize}
+  \vfill
+  {\footnotesize The source of every slide is in \texttt{demo/demo.tex}.}
+\end{frame}
+
+% ==========================================================================
+\section{Slide furniture}
+% ==========================================================================
+
+\begin{frame}{Blocks, columns, lists}
+  \begin{columns}[T,onlytextwidth]
+    \begin{column}{0.48\textwidth}
+      \begin{block}{Blocks}
+        Coloured title bar, light background. Group a definition, a result,
+        an assumption.
+      \end{block}
+      \begin{itemize}
+        \item Bullets are accent-coloured
+          \begin{itemize}
+            \item second level is an en-dash
+              \begin{itemize}
+                \item third is a small triangle
+              \end{itemize}
+          \end{itemize}
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \begin{block}{Footer}
+        Short author, short title and \texttt{frame / total} sit at the
+        bottom of every slide. Set them with
+        \texttt{\textbackslash renewcommand}\\
+        \texttt{\ \ \{\textbackslash insertshortauthor\}\{F. Sossan\}}.
+      \end{block}
+      \begin{block}{Corner logo}
+        \texttt{\textbackslash def\textbackslash cornerlogo\{logo.png\}}
+        puts a logo bottom-right of \emph{every} slide.
+      \end{block}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Filled lists: \texttt{fitemize}}
+  \begin{columns}[T,onlytextwidth]
+    \begin{column}{0.48\textwidth}
+      {\footnotesize A normal \texttt{itemize}:}
+      \begin{itemize}
+        \item First point
+        \item Second point
+        \item Third point
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      {\footnotesize \texttt{fitemize} spreads the items over the whole
+       frame — handy when a slide holds three lines and looks empty:}
+      \begin{fitemize}
+        \item First point
+        \item Second point
+        \item Third point
+      \end{fitemize}
+    \end{column}
+  \end{columns}
+  \vfill
+  {\footnotesize \texttt{fenumerate} does the same for numbered lists.}
+\end{frame}
+
+% A full-colour divider you place by hand, anywhere:
+\topicslide{\texttt{\textbackslash topicslide} — a divider on demand}
+
+\begin{frame}{Section dividers come for free}
+  \begin{itemize}
+    \item Every \texttt{\textbackslash section\{...\}} automatically produces
+          the full-colour divider you saw before this slide.
+    \item \texttt{\textbackslash topicslide\{Title\}} produces one wherever
+          you want, without opening a section.
+    \item \texttt{\textbackslash titleslide\{Title\}} produces an extra title
+          page mid-deck.
+  \end{itemize}
+\end{frame}
+
+% ==========================================================================
+\section{Content macros}
+% ==========================================================================
+
+\begin{frame}[fragile]{Maths helpers}
+  \begin{columns}[T,onlytextwidth]
+    \begin{column}{0.52\textwidth}
+      Upright constants: $\const{SOC}_{\max}$
+
+      \smallskip
+      A labelled underbrace, no wide gap:
+      \[ \uunderbrace{P_t + Q_t}{apparent power} \]
+
+      A forecast: \emph{value at $t$, known at $k$}:
+      $\vvector{P}{t}{k}$
+
+      \smallskip
+      Phasors: $230\phase{30^\circ}$ \qquad
+      Cancelling: $\cancel{x}$
+    \end{column}
+    \begin{column}{0.44\textwidth}
+      \footnotesize
+\begin{verbatim}
+$\const{SOC}_{\max}$
+\[ \uunderbrace{P_t + Q_t}
+     {apparent power} \]
+$\vvector{P}{t}{k}$
+$230\phase{30^\circ}$
+$\cancel{x}$
+\end{verbatim}
+      \normalsize
+      \texttt{mathtools}, \texttt{empheq}, \texttt{cancel} and
+      \texttt{steinmetz} are loaded for you.
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Text helpers}
+  \watermark{DRAFT}{8}
+  \begin{columns}[T,onlytextwidth]
+    \begin{column}{0.46\textwidth}
+      Quotations: \say{the grid is a queue with physics}
+
+      \medskip
+      Open questions: \todo{add the 2026 measurements}
+
+      \medskip
+      One deck, several languages:
+      \LANG{This sentence is the English branch.}%
+           {Deutscher Zweig.}%
+           {Branche française.}
+
+      \medskip
+      And this slide carries a watermark.
+    \end{column}
+    \begin{column}{0.5\textwidth}
+      \footnotesize
+\begin{verbatim}
+\say{the grid is a queue with physics}
+\todo{add the 2026 measurements}
+
+\def\EN{}          % in the preamble
+\LANG{English}{Deutsch}{Francais}
+
+\watermark{DRAFT}{8}
+\end{verbatim}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% ==========================================================================
+\section{Plots and diagrams}
+% ==========================================================================
+
+\begin{frame}[fragile]{First-quadrant plot: \texttt{q1simpleplot}}
+  \begin{columns}[T,onlytextwidth]
+    \begin{column}{0.5\textwidth}
+      \centering
+      \begin{q1simpleplot}{0.95\textwidth}{0.5\textheight}{$x$}{$y$}
+        \addplot[domain=0:1, samples=40, thick, color=primary] {x^2};
+        \addplanelabel{0.62,0.5}{\scriptsize $y=x^2$}{anchor=west}
+      \end{q1simpleplot}
+    \end{column}
+    \begin{column}{0.46\textwidth}
+      \footnotesize
+\begin{verbatim}
+\begin{q1simpleplot}
+    {0.95\textwidth}{0.5\textheight}
+    {$x$}{$y$}
+  \addplot[domain=0:1, samples=40,
+           thick, color=primary]{x^2};
+  \addplanelabel{0.62,0.5}
+    {\scriptsize $y=x^2$}{anchor=west}
+\end{q1simpleplot}
+\end{verbatim}
+      \normalsize
+      Axes through the origin, labels at the arrow tips, no ticks to read.
+      \texttt{q1q2simpleplot} does the same over $x\in[-1,1]$.
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{General plot and vectors}
+  \begin{columns}[T,onlytextwidth]
+    \begin{column}{0.5\textwidth}
+      \centering
+      \begin{plot}{0.95\textwidth}{0.5\textheight}{-2}{2}{-2}{2}{1}{$P$}{$Q$}
+        \vectorarrow{0,0}{1.4,1.2}{$\bar S$}
+      \end{plot}
+    \end{column}
+    \begin{column}{0.46\textwidth}
+      \footnotesize
+\begin{verbatim}
+\begin{plot}{w}{h}{xmin}{xmax}
+            {ymin}{ymax}{tickstep}
+            {$P$}{$Q$}
+  \vectorarrow{0,0}{1.4,1.2}{$\bar S$}
+\end{plot}
+\end{verbatim}
+      \normalsize
+      \texttt{\textbackslash vectorarrow} draws an arrow between two axis
+      coordinates and puts a white-backed label at its midpoint.
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Complex plane: \texttt{phasorbox}}
+  \begin{columns}[T,onlytextwidth]
+    \begin{column}{0.5\textwidth}
+      \centering
+      \begin{phasorbox}{0.95\textwidth}{0.5\textheight}
+        \vectorarrow{0,0}{0.7,0.5}{$\bar V$}
+        \vectorarrow{0,0}{0.5,-0.6}{$\bar I$}
+      \end{phasorbox}
+    \end{column}
+    \begin{column}{0.46\textwidth}
+      \centering
+      \begin{phasorbox_clean}{0.95\textwidth}{0.5\textheight}{-1}{1}{-1}{1}
+        \vectorarrow{0,0}{0.7,0.5}{$\bar V$}
+        \vectorarrow{0,0}{0.5,-0.6}{$\bar I$}
+      \end{phasorbox_clean}
+    \end{column}
+  \end{columns}
+  \vspace{0.4em}
+  {\footnotesize Left: \texttt{phasorbox}, gridded with labelled axes.
+   Right: \texttt{phasorbox\_clean}, same but bare — for a diagram that
+   should not look like a measurement.}
+\end{frame}
+
+\begin{frame}{Flowchart styles}
+  \centering
+  \begin{tikzpicture}[node distance=0.85cm, font=\small,
+    every node/.append style={minimum height=0.8cm}]
+    \node (start)  [startstop] {Measurement};
+    \node (proc)   [process, below=of start] {State estimation};
+    \node (dec)    [decision, below=of proc] {Feasible?};
+    \node (act)    [startstop, below=of dec] {Dispatch};
+    \draw [arrow] (start) -- (proc);
+    \draw [arrow] (proc)  -- (dec);
+    \draw [arrow] (dec)   -- node[right] {yes} (act);
+    \draw [arrow] (dec.east) -- ++(2.2,0) |- node[pos=0.25,right] {no} (proc.east);
+  \end{tikzpicture}
+
+  \vspace{0.3em}
+  {\footnotesize The styles \texttt{startstop}, \texttt{process},
+   \texttt{decision} and \texttt{arrow} come with the theme; TikZ and
+   \texttt{pgfplots} are already loaded.}
+\end{frame}
+
+% ==========================================================================
+\section{Making it yours}
+% ==========================================================================
+
+\begin{frame}[fragile]{Rebranding is two lines}
+  \begin{columns}[T,onlytextwidth]
+    \begin{column}{0.52\textwidth}
+      \footnotesize
+\begin{verbatim}
+\def\themeprimary{376092}    % main
+\def\themesecondary{ED7D31}  % accent
+\usetheme{gridlab}
+\end{verbatim}
+      \normalsize
+      Set them \emph{before} the theme is loaded and every title bar,
+      divider, bullet and block follows.
+    \end{column}
+    \begin{column}{0.44\textwidth}
+      \footnotesize
+\begin{verbatim}
+\def\titlelogos{...}
+\def\titlebottomlogo{logo.png}
+\def\cornerlogo{logo.png}
+\end{verbatim}
+      \normalsize
+      Logos default to the ones shipped with the theme; override them, or
+      set one empty to switch it off.
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Where to go next}
+  \begin{itemize}
+    \item \texttt{../main.tex} — the template to start a real presentation
+          from.
+    \item \texttt{../README.md} — installing the theme, and the Overleaf
+          route.
+    \item \texttt{../gridlab/beamerthemegridlab.sty} — the theme itself; the
+          macros above are all in the \textsc{utilities} half of the file.
+  \end{itemize}
+  \vfill
+  \centering
+  {\Large Thank you}\\[0.4em]
+  {\footnotesize fabrizio.sossan@hevs.ch}
+  \vfill
+\end{frame}
+
+\end{document}

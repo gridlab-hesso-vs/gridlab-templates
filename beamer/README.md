@@ -11,8 +11,9 @@ beamer/
 │   ├── beamerthemegridlab.sty
 │   ├── logo_gridlab.png
 │   └── logo_hesso.png
+├── demo/             feature tour: every macro the theme adds, on a slide
 ├── install.sh        link gridlab/ into your TeX tree (optional, once)
-├── make-build.sh     build the PDF and the Overleaf zip
+├── make-build.sh     build the PDFs and the Overleaf zip
 └── build/            output (git-ignored)
 ```
 
@@ -22,8 +23,9 @@ beamer/
 ./make-build.sh
 ```
 
-Produces `build/main.pdf` and `build/beamer-overleaf.zip`. Nothing needs to
-be installed first — `main.tex` finds the theme in `./gridlab`.
+Produces `build/main.pdf`, `build/demo.pdf` and `build/beamer-overleaf.zip`.
+Nothing needs to be installed first — `main.tex` finds the theme in
+`./gridlab`.
 
 To compile by hand instead: `pdflatex main.tex` twice (the second pass fills
 in the frame counter).
@@ -61,6 +63,13 @@ above picks the in-project copy on its own.
 Needs TeX Live 2020 or newer (Menu → Settings → TeX Live version): older
 versions lack the `\CurrentFilePath` kernel feature the theme uses to locate
 its own logos from a project subfolder.
+
+## What the theme can do
+
+`demo/demo.tex` is a tour of it: title page and dividers, blocks, filled
+lists, the maths and text helpers, the plot and phasor environments, the
+flowchart styles. Build it (`build/demo.pdf`) and flip through — each slide
+names the macro that produced it.
 
 ## Customise
 

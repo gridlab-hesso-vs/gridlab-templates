@@ -1,7 +1,8 @@
 #!/bin/sh
 # Build everything this template produces, into ./build:
 #
-#   build/main.pdf              the compiled example presentation
+#   build/main.pdf              the template, compiled
+#   build/demo.pdf              the feature tour in demo/
 #   build/beamer-overleaf.zip   main.tex + gridlab/, ready to drop on Overleaf
 #
 # Needs nothing installed: the theme is picked up from ./gridlab when it is
@@ -21,6 +22,17 @@ for pass in 1 2; do
   }
 done
 echo "build/main.pdf"
+
+# The demo lives in demo/ and loads the theme from ../gridlab, so it has to
+# be compiled from inside that directory.
+for pass in 1 2; do
+  (cd demo && pdflatex -interaction=nonstopmode -halt-on-error \
+                       -output-directory=../build demo.tex >/dev/null 2>&1) || {
+    echo "pdflatex failed on demo pass $pass -- see build/demo.log" >&2
+    exit 1
+  }
+done
+echo "build/demo.pdf"
 
 STAGE=$(mktemp -d)
 trap 'rm -rf "$STAGE"' EXIT
