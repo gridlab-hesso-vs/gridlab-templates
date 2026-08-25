@@ -139,20 +139,23 @@ $\cancel{x}$
       \centering
       \begin{q1simpleplot}{0.92\textwidth}{0.45\textheight}{$x$}{$y$}
         \addplot[domain=0:1, samples=40, thick, color=primary] {x^2};
-        \addplanelabel{0.62,0.5}{\scriptsize $y=x^2$}{anchor=west}
+        \addplanelabel{0.1,0.72}{$y=x^2$}{anchor=west}
       \end{q1simpleplot}
 
       {\footnotesize \verb|q1simpleplot{w}{h}{$x$}{$y$}| — axes through the
-       origin, labels at the arrow tips, no ticks to read.}
+       origin, labels at the arrow tips, no ticks to read. Text in the plot
+       uses \verb|\plotfont|, \verb|\small| by default.}
     \end{column}
     \begin{column}{0.48\textwidth}
       \centering
+      {\renewcommand{\plotfont}{\tiny}%
       \begin{plot}{0.92\textwidth}{0.45\textheight}{-2}{2}{-2}{2}{1}{$P$}{$Q$}
         \vectorarrow{0,0}{1.4,1.2}{$\bar S$}
-      \end{plot}
+      \end{plot}}
 
-      {\footnotesize \verb|plot{w}{h}{xmin}{xmax}{ymin}{ymax}| \verb|{step}{$P$}{$Q$}|
-       — with \verb|\vectorarrow| between two axis coordinates.}
+      {\footnotesize \verb|plot{w}{h}{xmin}{xmax}{ymin}{ymax}| \verb|{step}{$P$}{$Q$}|,
+       with \verb|\vectorarrow| between two axis coordinates. This one is
+       shrunk further by \verb|\renewcommand{\plotfont}{\tiny}|.}
     \end{column}
   \end{columns}
 \end{frame}

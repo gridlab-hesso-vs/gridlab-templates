@@ -101,6 +101,15 @@ Logos default to HES-SO on the title row and GridLab bottom right. Override
 with `\titlelogos`, `\titlebottomlogo` (positioned by `\titlebottomlogox` and
 `\titlebottomlogoheight`) and `\cornerlogo`; set one empty to switch it off.
 
+Text inside the plot environments — tick labels, axis labels and the labels
+placed by `\addplanelabel` and `\vectorarrow` — uses `\plotfont`, which is
+`\small`. Change it in the preamble, or in a group for a single plot:
+
+```latex
+\renewcommand{\plotfont}{\scriptsize}                  % all plots
+{\renewcommand{\plotfont}{\tiny} \begin{plot}...}      % just this one
+```
+
 For your own figures, point `\graphicspath` at their folder. The theme's logo
 paths are searched after yours, so a picture of yours with the same name is
 used.

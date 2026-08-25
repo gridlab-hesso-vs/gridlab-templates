@@ -298,10 +298,17 @@
 \addtobeamertemplate{block begin}{\setlength\abovedisplayskip{0pt}}{}
 
 % ---- Plot helpers ----------------------------------------------------------
+% Font used for everything inside the plot environments below: tick labels,
+% axis labels and the nodes placed by \addplanelabel / \vectorarrow.
+% Redefine it to resize them, globally in the preamble or locally in a group:
+%     \renewcommand{\plotfont}{\scriptsize}   % smaller
+%     {\renewcommand{\plotfont}{\tiny} \begin{plot}...\end{plot}}
+\providecommand{\plotfont}{\small}
+
 \providecommand{\addplanelabel}[3]{\node[#3] at (axis cs:#1) {#2};}
 \providecommand{\vectorarrow}[3]{%
   \draw[-{Latex}, line width=1.1] (axis cs:#1)--(axis cs:#2)
-    node[midway, fill=white] {\scriptsize #3};
+    node[midway, fill=white] {#3};
 }
 
 % First-quadrant plot:  \begin{q1simpleplot}{width}{height}{xlabel}{ylabel}
@@ -311,7 +318,7 @@
     axis lines=center, xtick={-2,2}, ytick={-2,2}, extra x ticks={0},
     every axis x label/.style={at={(ticklabel* cs:1)}, anchor=west},
     every axis y label/.style={at={(ticklabel* cs:1)}, anchor=south},
-    xlabel={#3}, ylabel={#4}, clip=false]
+    font=\plotfont, xlabel={#3}, ylabel={#4}, clip=false]
 }{\end{axis}\end{tikzpicture}}
 
 % First/second-quadrant plot: same arguments as q1simpleplot
@@ -321,7 +328,7 @@
     axis lines=center, xtick={-2,2}, ytick={-2,2}, extra x ticks={0},
     every axis x label/.style={at={(ticklabel* cs:1)}, anchor=west},
     every axis y label/.style={at={(ticklabel* cs:1)}, anchor=south},
-    xlabel={#3}, ylabel={#4}, clip=false]
+    font=\plotfont, xlabel={#3}, ylabel={#4}, clip=false]
 }{\end{axis}\end{tikzpicture}}
 
 % General plot: \begin{plot}{w}{h}{xmin}{xmax}{ymin}{ymax}{tickstep}{xlab}{ylab}
@@ -331,7 +338,7 @@
     axis lines=center, xtick distance=#7, ytick distance=#7, extra x ticks={0},
     every axis x label/.style={at={(ticklabel* cs:1)}, anchor=west},
     every axis y label/.style={at={(ticklabel* cs:1)}, anchor=south},
-    xlabel={#8}, ylabel={#9}]
+    font=\plotfont, xlabel={#8}, ylabel={#9}]
 }{\end{axis}\end{tikzpicture}}
 
 % Complex-plane box: \begin{phasorbox}{width}{height}
@@ -341,14 +348,14 @@
     xlabel={Real}, ylabel={Imag}, grid=both,
     grid style={line width=.1pt, draw=gray!10},
     major grid style={line width=.2pt, draw=gray!50},
-    minor tick num=5, ticklabel style={font=\footnotesize, fill=white}]
+    minor tick num=5, font=\plotfont, ticklabel style={fill=white}]
 }{\end{axis}\end{tikzpicture}}
 
 % Axis-less complex-plane box: \begin{phasorbox_clean}{w}{h}{xmin}{xmax}{ymin}{ymax}
 \newenvironment{phasorbox_clean}[6]{%
   \begin{tikzpicture}\begin{axis}[
     width=#1, height=#2, xmin=#3, xmax=#4, ymin=#5, ymax=#6,
-    axis lines=none, ticklabel style={font=\footnotesize, fill=white}]
+    axis lines=none, font=\plotfont, ticklabel style={fill=white}]
 }{\end{axis}\end{tikzpicture}}
 
 % Pass-through wrapper kept for backward compatibility.
