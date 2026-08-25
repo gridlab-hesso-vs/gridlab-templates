@@ -11,6 +11,7 @@
 \usepackage[T1]{fontenc}
 \usepackage{lmodern}
 \usepackage{graphicx}
+\usepackage{booktabs}
 
 % The demo sits one level below the package, so it points up at it.
 % A presentation uses the \IfFileExists form shown in ../main.tex.
@@ -76,36 +77,34 @@
 % ==========================================================================
 
 \begin{frame}[fragile]{Maths}
-  \begin{columns}[T,onlytextwidth]
-    \begin{column}{0.52\textwidth}
-      Upright constants: $\const{SOC}_{\max}$
+  \centering
+  \small
+  \renewcommand{\arraystretch}{1.5}
+  \begin{tabular}{@{}l@{\qquad}l@{\qquad}l@{}}
+    \toprule
+    \textbf{Result} & \textbf{Command} & \textbf{For} \\
+    \midrule
+    $\const{SOC}_{\max}$
+      & \verb|$\const{SOC}_{\max}$|
+      & upright constant \\
+    $\uunderbrace{P_t + Q_t}{apparent power}$
+      & \verb|$\uunderbrace{P_t + Q_t}{apparent power}$|
+      & labelled underbrace \\
+    $\vvector{P}{t}{k}$
+      & \verb|$\vvector{P}{t}{k}$|
+      & value at $t$, known at $k$ \\
+    $230\phase{30^\circ}$
+      & \verb|$230\phase{30^\circ}$|
+      & phasor \\
+    $\cancel{x}$
+      & \verb|$\cancel{x}$|
+      & cancelling \\
+    \bottomrule
+  \end{tabular}
 
-      \smallskip
-      A labelled underbrace, no wide gap:
-      \[ \uunderbrace{P_t + Q_t}{apparent power} \]
-
-      A forecast: \emph{value at $t$, known at $k$}:
-      $\vvector{P}{t}{k}$
-
-      \smallskip
-      Phasors: $230\phase{30^\circ}$ \qquad
-      Cancelling: $\cancel{x}$
-    \end{column}
-    \begin{column}{0.44\textwidth}
-      \footnotesize
-\begin{verbatim}
-$\const{SOC}_{\max}$
-\[ \uunderbrace{P_t + Q_t}
-     {apparent power} \]
-$\vvector{P}{t}{k}$
-$230\phase{30^\circ}$
-$\cancel{x}$
-\end{verbatim}
-      \normalsize
-      \texttt{mathtools}, \texttt{empheq}, \texttt{cancel} and
-      \texttt{steinmetz} are loaded for you.
-    \end{column}
-  \end{columns}
+  \vspace{0.6em}
+  {\footnotesize \texttt{mathtools}, \texttt{empheq}, \texttt{cancel} and
+   \texttt{steinmetz} are loaded for you.}
 \end{frame}
 
 \begin{frame}[fragile]{Text}
