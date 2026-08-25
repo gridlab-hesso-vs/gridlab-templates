@@ -266,6 +266,16 @@
   \end{tikzpicture}%
 }
 
+% ---- Full-bleed image: \fullimage{path} -------------------------------------
+% Covers the whole slide; put it in a [plain] frame.  The aspect ratio is kept,
+% so an image whose shape differs from the slide is fitted inside it.
+\providecommand{\fullimage}[1]{%
+  \begin{tikzpicture}[remember picture,overlay]
+    \node at (current page.center)
+      {\includegraphics[width=\paperwidth,height=\paperheight,keepaspectratio]{#1}};
+  \end{tikzpicture}%
+}
+
 % ---- Alternative slide commands --------------------------------------------
 % Backward-compatible title slide (uses the theme's title-page template).
 \providecommand{\titleslide}[1]{%

@@ -46,13 +46,6 @@
 % Your own pictures still come from wherever you put them, as usual:
 % \graphicspath{{figures/}}
 
-% Full-bleed image helper: \fullimage{path}
-\newcommand{\fullimage}[1]{%
-  \begin{tikzpicture}[remember picture,overlay]
-    \node[at=(current page.center)] {%
-      \includegraphics[width=\paperwidth,height=\paperheight,keepaspectratio]{#1}};
-  \end{tikzpicture}}
-
 \begin{document}
 
 % ---- Title slide ----------------------------------------------------------

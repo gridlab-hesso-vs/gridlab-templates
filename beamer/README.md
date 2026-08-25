@@ -5,23 +5,17 @@ short title and frame number, and utility macros for maths, lists, plots and
 flowcharts. `main.tex` is the template; `demo/demo.pdf` shows what the theme
 provides.
 
-
+**Use is authorized for Gridlab members only.**
 
 ## Using the template
 
 ### On Overleaf
 
-- Download `beamer-overleaf.zip` from this folder — on GitHub, click the file,
-  then *Download raw file*.
-- In Overleaf, *New Project → Upload Project*, and drop the zip on it.
-- Set *Menu → Settings → TeX Live version* to 2020 or newer. Earlier versions
-  do not provide `\CurrentFilePath`, which the theme uses to find its logos
-  inside a project subfolder.
+- Download [`beamer-overleaf.zip`](https://github.com/gridlab-hesso-vs/gridlab-templates/raw/main/beamer/beamer-overleaf.zip).
+- In Overleaf, *New Project → Existing project (.zip)*, and drop the zip on it.
 - Edit `main.tex`.
 
-The zip holds `main.tex` and the `gridlab/` folder with the theme and the
-logos, and is rebuilt by `make-build.sh`. For an Overleaf project that already
-exists, upload `main.tex` and the `gridlab/` folder instead.
+Alternatively, upload `main.tex` and the `gridlab/` folder instead.
 
 ### With a local LaTeX distribution
 
