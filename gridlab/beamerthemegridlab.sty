@@ -1,0 +1,367 @@
+% ============================================================================
+%  beamerthemegridlab.sty
+%  A clean, modern Beamer theme + GridLab/HES-SO utility macros, in one file.
+%
+%  Install once (macOS):  symlink or copy this file AND its figures/ folder
+%  into
+%      ~/Library/texmf/tex/latex/gridlab/
+%  then in any .tex, from anywhere, simply:
+%      \usetheme{gridlab}
+%  The theme's own images travel with it: they are found automatically from
+%  the install folder, so no figures/ folder is needed next to your .tex.
+%  See "ASSET PATHS" below.
+%
+%  Colours default to GridLab blue/orange. To rebrand, set them BEFORE
+%  loading the theme (hex, no '#'):
+%      \def\themeprimary{376092}    % main colour
+%      \def\themesecondary{ED7D31}  % accent colour
+%  Everything below the "UTILITIES" banner is convenience macros you can use
+%  in slides (math helpers, filled lists, plot environments, ...).
+% ============================================================================
+\ProvidesPackage{beamerthemegridlab}[2026/07/02 GridLab Beamer theme + utilities]
+
+% ---------------------------------------------------------------------------
+% Packages
+% ---------------------------------------------------------------------------
+\RequirePackage{tikz}
+\usetikzlibrary{arrows.meta, shapes.geometric, positioning}
+\RequirePackage{xcolor}
+\RequirePackage{calc}
+\RequirePackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\RequirePackage{mathtools}   % loads amsmath
+\RequirePackage{empheq}
+\RequirePackage{cancel}
+\RequirePackage{steinmetz}   % phasor notation: \phase
+\RequirePackage{dirtytalk}   % quotes: \say
+\RequirePackage{etoolbox}    % \ifdefempty for the "logo set?" tests
+
+% ============================================================================
+%  ASSET PATHS  --  load the theme's own images from wherever it is installed
+% ============================================================================
+% Two cases, both handled here, so \includegraphics{logo_hesso.png} works from
+% any .tex in any directory:
+%
+%  (a) Installed in a TeX tree (\usetheme{gridlab}).  kpathsea searches the
+%      whole tree recursively, so every file living under the install folder
+%      -- including in subdirectories such as gridlab/figures/ -- is found by
+%      bare file name.  Nothing to configure.
+%
+%  (b) Loaded from a local copy (\usepackage{theme/beamerthemegridlab}).
+%      kpathsea does not help there, so we ask the LaTeX kernel where this
+%      file was read from (\CurrentFilePath, kernel 2019/10/01 or newer) and
+%      append that folder, its figures/ subfolder and ../figures/ to the
+%      graphics search path.
+%
+% \themedir expands to the theme's own directory (with trailing slash), or to
+% nothing in case (a).  Use it if you ever need an explicit path.
+\RequirePackage{graphicx}
+\providecommand{\CurrentFilePath}{}   % pre-2019 kernels: no path information
+\edef\themedir{\CurrentFilePath}
+\ifx\themedir\@empty\else\edef\themedir{\themedir/}\fi
+
+% \themeaddgraphicspath{dir/} -- append a directory to the graphics search
+% path without clobbering \graphicspath settings made in the document.
+\newcommand{\themeaddgraphicspath}[1]{%
+  \ifx\Ginput@path\@undefined\def\Ginput@path{}\fi
+  \g@addto@macro\Ginput@path{{#1}}%
+}
+\ifx\themedir\@empty\else
+  % Appended at \begin{document} so a \graphicspath in the preamble (which
+  % redefines the list wholesale) cannot drop these entries again.  They come
+  % last, so a same-named image of your own still wins.
+  \AtBeginDocument{%
+    \themeaddgraphicspath{\themedir}%
+    \themeaddgraphicspath{\themedir figures/}%
+    \themeaddgraphicspath{\themedir../figures/}%
+  }%
+\fi
+
+% Show source context in error messages so mistakes are easier to locate.
+% (We use plain \newenvironment below, not environ's \NewEnviron/\BODY, which
+%  would otherwise blame the \end{...} line instead of the real one.)
+\setcounter{errorcontextlines}{15}
+
+% ============================================================================
+%  THEME  --  visual style
+% ============================================================================
+
+% ---- Colours (override \themeprimary/\themesecondary before loading) -------
+\providecommand{\themeprimary}{376092}    % GridLab blue
+\providecommand{\themesecondary}{ED7D31}  % orange accent
+\definecolor{primary}{HTML}{\themeprimary}
+\definecolor{secondary}{HTML}{\themesecondary}
+\definecolor{ink}{HTML}{1C2733}    % near-black body text
+\definecolor{subtle}{HTML}{5B6B7A} % muted grey text
+\definecolor{paper}{HTML}{FFFFFF}
+\definecolor{wash}{HTML}{F2F5F8}   % light block background
+
+% ---- Logos (override in your main .tex) ------------------------------------
+%   \def\titlelogos{...}       -> logo row on the title page (\hfill between
+%                                 two logos pushes them to the edges)
+%   \def\titlebottomlogo{path} -> logo bottom-right of the title page
+%   \def\cornerlogo{path}      -> small logo bottom-right of every content
+%                                 slide
+% The defaults are the logos shipped with the theme; they are found through
+% the paths set up in "ASSET PATHS" above, so plain file names are enough.
+% Set a macro to empty to switch that logo off, e.g. \def\titlelogos{}.
+\providecommand{\themelogogridlab}{logo_gridlab.png}
+\providecommand{\themelogohesso}{logo_hesso.png}
+\providecommand{\titlelogos}{\hfill\includegraphics[height=1.3cm,keepaspectratio]{\themelogohesso}}
+\providecommand{\titlebottomlogo}{\themelogogridlab}
+\providecommand{\cornerlogo}{}
+% Placement of \titlebottomlogo: horizontal offset from the right paper edge
+% and printed height.
+\providecommand{\titlebottomlogox}{-1.1cm}
+\providecommand{\titlebottomlogoheight}{0.81cm}
+
+% ---- Base setup ------------------------------------------------------------
+\useinnertheme{rounded}
+\useoutertheme{default}
+\setbeamertemplate{navigation symbols}{}
+\setbeamercovered{transparent}
+
+\usefonttheme{professionalfonts}
+\setbeamerfont{title}{size=\Large,series=\bfseries}
+\setbeamerfont{subtitle}{size=\normalsize,series=\mdseries}
+\setbeamerfont{frametitle}{size=\large,series=\bfseries}
+\setbeamerfont{author}{size=\small}
+\setbeamerfont{institute}{size=\footnotesize}
+\setbeamerfont{date}{size=\footnotesize}
+
+\setbeamercolor{normal text}{fg=ink,bg=paper}
+\setbeamercolor{structure}{fg=primary}
+\setbeamercolor{title}{fg=primary}
+\setbeamercolor{subtitle}{fg=subtle}
+\setbeamercolor{frametitle}{fg=white,bg=primary}
+\setbeamercolor{author}{fg=ink}
+\setbeamercolor{institute}{fg=subtle}
+\setbeamercolor{date}{fg=subtle}
+\setbeamercolor{author in head/foot}{fg=subtle,bg=paper}
+\setbeamercolor{title in head/foot}{fg=subtle,bg=paper}
+\setbeamercolor{date in head/foot}{fg=subtle,bg=paper}
+\setbeamercolor{page number in head/foot}{fg=subtle,bg=paper}
+\setbeamercolor{itemize item}{fg=secondary}
+\setbeamercolor{itemize subitem}{fg=secondary}
+\setbeamercolor{itemize subsubitem}{fg=secondary}
+\setbeamercolor{enumerate item}{fg=secondary}
+\setbeamercolor{block title}{fg=white,bg=primary}
+\setbeamercolor{block body}{fg=ink,bg=wash}
+\setbeamercolor{alerted text}{fg=secondary}
+
+\setbeamertemplate{itemize item}{\raisebox{0.12ex}{\small\textbullet}}
+\setbeamertemplate{itemize subitem}{\raisebox{0.12ex}{\scriptsize\textendash}}
+\setbeamertemplate{itemize subsubitem}{\raisebox{0.12ex}{\tiny$\blacktriangleright$}}
+
+% ---- Frame title: solid colour bar -----------------------------------------
+\setbeamertemplate{frametitle}{%
+  \nointerlineskip
+  \begin{beamercolorbox}[wd=\paperwidth,ht=3.4ex,dp=1.8ex,leftskip=0.9cm,rightskip=0.9cm]{frametitle}%
+    \usebeamerfont{frametitle}\insertframetitle%
+  \end{beamercolorbox}%
+}
+
+% ---- Footline: short title | author | frame number -------------------------
+\setbeamertemplate{footline}{%
+  \leavevmode%
+  \hbox{%
+    \begin{beamercolorbox}[wd=.34\paperwidth,ht=2.4ex,dp=1ex,leftskip=0.9cm]{author in head/foot}%
+      \usebeamerfont{date}\color{subtle}\insertshortauthor%
+    \end{beamercolorbox}%
+    \begin{beamercolorbox}[wd=.46\paperwidth,ht=2.4ex,dp=1ex,center]{title in head/foot}%
+      \usebeamerfont{date}\color{subtle}\insertshorttitle%
+    \end{beamercolorbox}%
+    \begin{beamercolorbox}[wd=.20\paperwidth,ht=2.4ex,dp=1ex,rightskip=0.9cm]{date in head/foot}%
+      \usebeamerfont{date}\color{subtle}\hfill\insertframenumber\,/\,\inserttotalframenumber%
+    \end{beamercolorbox}%
+  }%
+  \vskip2pt%
+  \ifdefempty{\cornerlogo}{}{%
+    \begin{tikzpicture}[remember picture,overlay]
+      \node[anchor=south east,inner sep=0pt]
+        at ([xshift=-0.9cm,yshift=0.55cm]current page.south east)
+        {\includegraphics[height=0.6cm,keepaspectratio]{\cornerlogo}};
+    \end{tikzpicture}%
+  }
+}
+
+% ---- Title page ------------------------------------------------------------
+\defbeamertemplate*{title page}{gridlab}[1][]{%
+  \begin{tikzpicture}[remember picture,overlay]
+    \fill[primary] (current page.north west) rectangle ([yshift=-0.7cm]current page.north east);
+    \fill[secondary] ([yshift=-0.7cm]current page.north west) rectangle ([yshift=-0.78cm]current page.north east);
+    \fill[primary] (current page.south west) rectangle ([yshift=0.35cm]current page.south east);
+  \end{tikzpicture}%
+  \ifdefempty{\titlelogos}{}{%
+    \vspace{0.9cm}
+    \hbox to \linewidth{\titlelogos}\par
+  }
+  \vfill
+  \begin{beamercolorbox}[sep=8pt,left]{title}
+    \usebeamerfont{title}\inserttitle\par
+  \end{beamercolorbox}
+  \ifx\insertsubtitle\empty\else
+    \vspace{-0.3em}
+    \begin{beamercolorbox}[sep=8pt,left]{subtitle}
+      \usebeamerfont{subtitle}\insertsubtitle\par
+    \end{beamercolorbox}
+  \fi
+  \vspace{0.4em}
+  {\color{secondary}\rule{0.42\textwidth}{1.3pt}}\par
+  \vspace{1.0em}
+  \begin{beamercolorbox}[sep=8pt,left]{author}
+    \usebeamerfont{author}\insertauthor\par
+    \vspace{0.3em}
+    \usebeamerfont{institute}\insertinstitute\par
+    \vspace{0.6em}
+    \usebeamerfont{date}\insertdate\par
+  \end{beamercolorbox}
+  \vfill
+  \ifdefempty{\titlebottomlogo}{}{%
+    \begin{tikzpicture}[remember picture,overlay]
+      \node[anchor=south east,inner sep=0pt]
+        at ([xshift=\titlebottomlogox,yshift=0.85cm]current page.south east)
+        {\includegraphics[height=\titlebottomlogoheight,keepaspectratio]{\titlebottomlogo}};
+    \end{tikzpicture}%
+  }
+}
+
+% ---- Section divider frames (triggered by \section{...}) -------------------
+\AtBeginSection[]{%
+  \begin{frame}[plain,noframenumbering]
+    \begin{tikzpicture}[remember picture,overlay]
+      \fill[primary] (current page.south west) rectangle (current page.north east);
+      \fill[secondary] ([yshift=-0.12\paperheight]current page.west)
+        rectangle ([yshift=-0.125\paperheight]current page.east);
+      \node[anchor=west,text=white,font=\Large\bfseries]
+        at ([xshift=0.9cm]current page.west) {\secname};
+    \end{tikzpicture}%
+  \end{frame}%
+}
+
+% ============================================================================
+%  UTILITIES  --  convenience macros for use inside slides
+% ============================================================================
+
+% ---- TikZ flowchart styles -------------------------------------------------
+\tikzset{
+  startstop/.style = {rectangle, rounded corners, draw, minimum width=3cm, minimum height=1cm, align=center},
+  process/.style   = {rectangle, draw, minimum width=3cm, minimum height=1cm, align=center},
+  decision/.style  = {diamond, draw, aspect=2, align=center, inner sep=1pt},
+  arrow/.style     = {-{Latex}, thick}
+}
+
+% ---- Math helpers ----------------------------------------------------------
+\providecommand{\vvector}[3]{\boldsymbol{#1}_{#3|#2}}          % vector notation
+\providecommand{\uunderbrace}[2]{\underbrace{#1}_{\mathclap{\text{#2}}}} % underbrace, no wide gap
+\providecommand{\const}[1]{\mathrm{#1}}                        % typeset a constant
+
+% ---- Text helpers ----------------------------------------------------------
+\providecommand{\todo}[1]{{\color{red}\texttt{TODO:} #1}}
+% Language switch: \LANG{English}{Deutsch}{Francais}; define one of \EN \DE \FR
+\providecommand{\LANG}[3]{\ifdefined\EN #1\fi\ifdefined\DE #2\fi\ifdefined\FR #3\fi}
+
+% ---- Watermark: \watermark{text}{scale} ------------------------------------
+\providecommand{\watermark}[2]{%
+  \begin{tikzpicture}[remember picture, overlay]
+    \node[rotate=30, scale=#2, text opacity=0.1, color=red] at (current page.center) {#1};
+  \end{tikzpicture}%
+}
+
+% ---- Alternative slide commands --------------------------------------------
+% Backward-compatible title slide (uses the theme's title-page template).
+\providecommand{\titleslide}[1]{%
+  \begingroup\title{#1}%
+  \begin{frame}[plain,noframenumbering]\titlepage\end{frame}%
+  \endgroup
+}
+% Full-colour topic/divider slide: \topicslide{Title}
+\providecommand{\topicslide}[1]{%
+  \begingroup
+  \setbeamercolor{background canvas}{bg=primary}%
+  \setbeamercolor{normal text}{fg=white,bg=primary}%
+  \begin{frame}[plain]
+    \begin{tikzpicture}[remember picture,overlay]
+      \fill[secondary] ([yshift=-0.12\paperheight]current page.west)
+        rectangle ([yshift=-0.125\paperheight]current page.east);
+      \node[anchor=west,text=white,font=\LARGE\bfseries]
+        at ([xshift=1.0cm]current page.west) {#1};
+    \end{tikzpicture}%
+  \end{frame}%
+  \endgroup
+}
+
+% ---- Filled lists (items spread to fill the frame) -------------------------
+\providecommand{\ifill}{\setlength{\itemsep}{\fill}}
+\newenvironment{fitemize}{\begin{itemize}\setlength{\itemsep}{\fill}}{\end{itemize}}
+\newenvironment{fenumerate}{\begin{enumerate}\setlength{\itemsep}{\fill}}{\end{enumerate}}
+
+% ---- Block spacing tweak ---------------------------------------------------
+\addtobeamertemplate{block begin}{\setlength\abovedisplayskip{0pt}}{}
+
+% ---- Plot helpers ----------------------------------------------------------
+\providecommand{\addplanelabel}[3]{\node[#3] at (axis cs:#1) {#2};}
+\providecommand{\vectorarrow}[3]{%
+  \draw[-{Latex}, line width=1.1] (axis cs:#1)--(axis cs:#2)
+    node[midway, fill=white] {\scriptsize #3};
+}
+
+% First-quadrant plot:  \begin{q1simpleplot}{width}{height}{xlabel}{ylabel}
+\newenvironment{q1simpleplot}[4]{%
+  \begin{tikzpicture}\begin{axis}[
+    width=#1, height=#2, xmin=-0.02, xmax=1, ymin=-0.02, ymax=1,
+    axis lines=center, xtick={-2,2}, ytick={-2,2}, extra x ticks={0},
+    every axis x label/.style={at={(ticklabel* cs:1)}, anchor=west},
+    every axis y label/.style={at={(ticklabel* cs:1)}, anchor=south},
+    xlabel={#3}, ylabel={#4}, clip=false]
+}{\end{axis}\end{tikzpicture}}
+
+% First/second-quadrant plot: same arguments as q1simpleplot
+\newenvironment{q1q2simpleplot}[4]{%
+  \begin{tikzpicture}\begin{axis}[
+    width=#1, height=#2, xmin=-1, xmax=1, ymin=0, ymax=1,
+    axis lines=center, xtick={-2,2}, ytick={-2,2}, extra x ticks={0},
+    every axis x label/.style={at={(ticklabel* cs:1)}, anchor=west},
+    every axis y label/.style={at={(ticklabel* cs:1)}, anchor=south},
+    xlabel={#3}, ylabel={#4}, clip=false]
+}{\end{axis}\end{tikzpicture}}
+
+% General plot: \begin{plot}{w}{h}{xmin}{xmax}{ymin}{ymax}{tickstep}{xlab}{ylab}
+\newenvironment{plot}[9]{%
+  \begin{tikzpicture}\begin{axis}[
+    width=#1, height=#2, xmin=#3, xmax=#4, ymin=#5, ymax=#6,
+    axis lines=center, xtick distance=#7, ytick distance=#7, extra x ticks={0},
+    every axis x label/.style={at={(ticklabel* cs:1)}, anchor=west},
+    every axis y label/.style={at={(ticklabel* cs:1)}, anchor=south},
+    xlabel={#8}, ylabel={#9}]
+}{\end{axis}\end{tikzpicture}}
+
+% Complex-plane box: \begin{phasorbox}{width}{height}
+\newenvironment{phasorbox}[2]{%
+  \begin{tikzpicture}\begin{axis}[
+    width=#1, height=#2, xmin=-1, xmax=1, ymin=-1, ymax=1,
+    xlabel={Real}, ylabel={Imag}, grid=both,
+    grid style={line width=.1pt, draw=gray!10},
+    major grid style={line width=.2pt, draw=gray!50},
+    minor tick num=5, ticklabel style={font=\footnotesize, fill=white}]
+}{\end{axis}\end{tikzpicture}}
+
+% Axis-less complex-plane box: \begin{phasorbox_clean}{w}{h}{xmin}{xmax}{ymin}{ymax}
+\newenvironment{phasorbox_clean}[6]{%
+  \begin{tikzpicture}\begin{axis}[
+    width=#1, height=#2, xmin=#3, xmax=#4, ymin=#5, ymax=#6,
+    axis lines=none, ticklabel style={font=\footnotesize, fill=white}]
+}{\end{axis}\end{tikzpicture}}
+
+% Pass-through wrapper kept for backward compatibility.
+\newenvironment{phasordiagram}[1]{}{}
+
+% ---- Hyperlink colours -----------------------------------------------------
+% Beamer already loads hyperref; this only configures it.
+\hypersetup{
+  colorlinks=true, linkcolor=primary, citecolor=primary,
+  filecolor=primary, urlcolor=primary,
+  pdfborder={0 0 0}, pdfpagemode=UseNone, pdftitle={Beamer presentation}
+}
+
+\endinput

@@ -1,0 +1,21 @@
+# LaTeX build artefacts
+*.aux
+*.log
+*.nav
+*.out
+*.snm
+*.toc
+*.vrb
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.bbl
+*.blg
+*.run.xml
+*.bcf
+
+# Build output (Overleaf zips, compiled examples)
+build/
+
+# macOS
+.DS_Store

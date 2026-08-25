@@ -1,0 +1,129 @@
+\documentclass[aspectratio=169,11pt]{beamer}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{graphicx}
+\usepackage{booktabs}
+
+% GridLab theme + utility macros.  This line works in both places:
+%   * theme installed in your TeX tree (./install.sh)  -> \usetheme{gridlab}
+%   * gridlab/ folder sitting next to this file (Overleaf, or a zip you sent
+%     to someone) -> loaded straight from that folder, logos included.
+% To rebrand, set the colours (hex, no '#') BEFORE the line below:
+%   \def\themeprimary{376092}    % main colour   (default: GridLab blue)
+%   \def\themesecondary{ED7D31}  % accent colour (default: orange)
+\IfFileExists{gridlab/beamerthemegridlab.sty}
+  {\usepackage{gridlab/beamerthemegridlab}}
+  {\usetheme{gridlab}}
+
+% ---------------------------------------------------------------------------
+%  CUSTOMISE — title block
+% ---------------------------------------------------------------------------
+\title{Your Presentation Title}
+\subtitle{An optional subtitle goes here}
+\author{Prof. Fabrizio Sossan}
+\institute{Gridlab, HES-SO Valais-Wallis\\fabrizio.sossan@hevs.ch}
+\date{{\footnotesize Slides compiled on: \today}}
+
+% Short versions appear in the footer
+\renewcommand{\insertshortauthor}{F. Sossan}
+\renewcommand{\insertshorttitle}{Short Title}
+
+% ---------------------------------------------------------------------------
+%  CUSTOMISE — logos  (optional: the theme already ships these defaults)
+% ---------------------------------------------------------------------------
+% The theme's own logos live next to it in the install folder and are found by
+% bare file name — no figures/ folder is needed next to this .tex.  Uncomment
+% to override, or set a macro empty to switch that logo off.
+%
+% \def\titlelogos{\hfill\includegraphics[height=1.3cm]{logo_hesso.png}}
+% \def\titlebottomlogo{logo_gridlab.png}   % bottom-right of the title page
+% \def\titlebottomlogox{-1.1cm}            % its offset from the right edge
+% \def\titlebottomlogoheight{0.81cm}       % its height
+% \def\cornerlogo{}                        % small logo on every content slide
+%
+% Your own pictures still come from wherever you put them, as usual:
+% \graphicspath{{figures/}}
+
+% Full-bleed image helper: \fullimage{path}
+\newcommand{\fullimage}[1]{%
+  \begin{tikzpicture}[remember picture,overlay]
+    \node[at=(current page.center)] {%
+      \includegraphics[width=\paperwidth,height=\paperheight,keepaspectratio]{#1}};
+  \end{tikzpicture}}
+
+\begin{document}
+
+% ---- Title slide ----------------------------------------------------------
+\begin{frame}[plain,noframenumbering]
+  \titlepage
+\end{frame}
+
+% Legacy alternative still works:
+% \titleslide{Alternative Title}
+
+% ---- Optional table of contents ------------------------------------------
+\begin{frame}{Outline}
+  \tableofcontents
+\end{frame}
+
+% ==========================================================================
+%  SLIDES — replace everything below with your content
+% ==========================================================================
+\section{First Section}
+
+\begin{frame}{A bullet slide}
+  \begin{itemize}
+    \item First key point worth making
+    \item A second point with a \alert{highlighted} word
+      \begin{itemize}
+        \item A supporting sub-point
+        \item Another supporting detail
+      \end{itemize}
+    \item A closing point with a custom constant: $\const{SOC}$
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Two columns}
+  \begin{columns}[T,onlytextwidth]
+    \begin{column}{0.5\textwidth}
+      \begin{block}{Left}
+        Use blocks to group related ideas.
+      \end{block}
+    \end{column}
+    \begin{column}{0.5\textwidth}
+      \begin{block}{Right}
+        Columns are handy for text beside a figure.
+      \end{block}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\section{Compatibility examples}
+
+\begin{frame}{Filled list and math helpers}
+  \begin{fitemize}
+    \item Legacy \texttt{fitemize} still works.
+    \item Legacy underbrace: $\uunderbrace{x+y}{sum}$.
+    \item Steinmetz notation still works: $230\phase{30^\circ}$.
+  \end{fitemize}
+\end{frame}
+
+\begin{frame}{A simple custom plot}
+  \centering
+  \begin{q1simpleplot}{0.55\textwidth}{0.45\textheight}{$x$}{$y$}
+    \addplot[domain=0:1, samples=20] {x^2};
+    \addplanelabel{0.65,0.45}{\scriptsize $y=x^2$}{anchor=west}
+  \end{q1simpleplot}
+\end{frame}
+
+\begin{frame}{Closing}
+  \centering
+  \vfill
+  {\Large Thank you}\\[0.6em]
+  {\footnotesize fabrizio.sossan@hevs.ch}
+  \vfill
+\end{frame}
+
+\end{document}
