@@ -1,5 +1,9 @@
 # GridLab document templates
 
+___
+**Institutional use only** This template is intended for use by authorized members of the Gridlab HES-SO Valais. The institutional name, logo, and other brand assets remain the property of the lab and may not be used without authorization.
+___
+
 Templates for GridLab / HES-SO Valais-Wallis documents.
 
 ```
@@ -8,9 +12,8 @@ gridlab-templates/
 ```
 
 Each document type has its own folder, containing its source, its assets, its
-build script and its output. Further types — `powerpoint/`, `letter/`,
-`article/`, `poster/` — go in folders next to `beamer/`, in whatever tooling
-they use.
+build script and its output. Further types might come: `powerpoint/`, `letter/`,
+`article/`, `poster/`, and they will go in folders next to `beamer/`.
 
 See the README inside a type folder for how to use it.
 

@@ -1,9 +1,11 @@
 # Beamer presentation
 
-A 16:9 GridLab presentation: title page, section dividers, footer with author,
+Template for GridLab presentation in Latex: title page, section dividers, footer with author,
 short title and frame number, and utility macros for maths, lists, plots and
 flowcharts. `main.tex` is the template; `demo/demo.pdf` shows what the theme
 provides.
+
+
 
 ## Using the template
 
