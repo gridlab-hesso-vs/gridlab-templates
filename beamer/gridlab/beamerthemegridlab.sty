@@ -291,23 +291,29 @@
 
 % Closing slide: \closingslide  or  \closingslide[Merci de votre attention !]
 % Headline, then the author and institute set with \author and \institute,
-% framed like the title page. Customise the defaults with
+% framed like the title page, with a logo in each bottom corner.
+% Customise the defaults with
 %     \def\closingtitle{Thank you}          % the headline
 %     \def\closingnote{Questions?}          % an extra line underneath
+%     \def\closingleftlogo{logo.png}        % bottom-left logo, empty to drop
 \providecommand{\closingtitle}{Thank you for your attention}
 \providecommand{\closingnote}{}
+\providecommand{\closingleftlogo}{\themelogohesso}
+\providecommand{\closingleftlogox}{1.1cm}
+\providecommand{\closingleftlogoheight}{0.8cm}
+% \closingtop is how far the text block sits below the top edge.
+\providecommand{\closingtop}{0.16\paperheight}
 \newcommand{\closingslide}[1][\closingtitle]{%
-  \begin{frame}[plain,noframenumbering]
+  \begin{frame}[plain,noframenumbering,t]
     \begin{tikzpicture}[remember picture,overlay]
       \fill[primary] (current page.north west) rectangle ([yshift=-0.7cm]current page.north east);
       \fill[secondary] ([yshift=-0.7cm]current page.north west) rectangle ([yshift=-0.78cm]current page.north east);
       \fill[primary] (current page.south west) rectangle ([yshift=0.35cm]current page.south east);
-    \end{tikzpicture}%
-    \ifdefempty{\titlelogos}{}{%
-      \vspace{0.9cm}
-      \hbox to \linewidth{\titlelogos}\par
-    }
-    \vfill
+    \end{tikzpicture}\par
+    % \par above matters: the tikzpicture opens a paragraph, and \vspace in
+    % horizontal mode would be deferred until after it, pinning the headline
+    % to the top of the slide.
+    \vspace*{\closingtop}
     \centering
     {\usebeamerfont{title}\color{primary}#1\par}
     \vspace{0.4em}
@@ -321,13 +327,18 @@
       {\usebeamerfont{date}\color{subtle}\closingnote\par}
     }
     \vfill
-    \ifdefempty{\titlebottomlogo}{}{%
-      \begin{tikzpicture}[remember picture,overlay]
+    \begin{tikzpicture}[remember picture,overlay]
+      \ifdefempty{\closingleftlogo}{}{%
+        \node[anchor=south west,inner sep=0pt]
+          at ([xshift=\closingleftlogox,yshift=0.85cm]current page.south west)
+          {\includegraphics[height=\closingleftlogoheight,keepaspectratio]{\closingleftlogo}};
+      }%
+      \ifdefempty{\titlebottomlogo}{}{%
         \node[anchor=south east,inner sep=0pt]
           at ([xshift=\titlebottomlogox,yshift=0.85cm]current page.south east)
           {\includegraphics[height=\titlebottomlogoheight,keepaspectratio]{\titlebottomlogo}};
-      \end{tikzpicture}%
-    }
+      }%
+    \end{tikzpicture}%
   \end{frame}%
 }
 

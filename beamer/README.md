@@ -98,12 +98,15 @@ Colours, set before the theme is loaded (hex, no `#`):
 ```
 
 The closing slide is `\closingslide`, placed outside any frame. It shows a
-headline and the `\author` and `\institute` from the title block:
+headline and the `\author` and `\institute` from the title block, with the
+school logo bottom left and the lab logo bottom right:
 
 ```latex
-\def\closingtitle{Thank you}     % headline for the whole deck
-\def\closingnote{Questions?}     % an extra line underneath
-\closingslide                    % or \closingslide[Merci !] for one slide
+\def\closingtitle{Thank you}          % headline for the whole deck
+\def\closingnote{Questions?}          % an extra line underneath
+\def\closingleftlogo{logo.png}        % bottom-left logo, empty to drop it
+\def\closingtop{0.16\paperheight}     % how high the text block sits
+\closingslide                         % or \closingslide[Merci !] for one slide
 ```
 
 Logos default to HES-SO on the title row and GridLab bottom right. Override
