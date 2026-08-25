@@ -14,7 +14,7 @@
 *.run.xml
 *.bcf
 
-# Build output (Overleaf zips, compiled examples)
+# Per-type build output (compiled examples, Overleaf zips)
 build/
 
 # macOS
