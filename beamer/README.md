@@ -11,15 +11,17 @@ provides.
 
 ### On Overleaf
 
-```sh
-./make-build.sh          # writes build/beamer-overleaf.zip
-```
+Download **`beamer-overleaf.zip`** from this folder — on GitHub, click the
+file, then *Download raw file*. Nothing to build or install.
 
-Upload that zip to an Overleaf project (Menu → Upload, or drop it on the file
-panel) and edit `main.tex`. The zip contains `main.tex` and the `gridlab/`
-folder, which holds the theme and the logos.
+In Overleaf, *New Project → Upload Project* and drop the zip on it, then edit
+`main.tex`. The zip holds `main.tex` and the `gridlab/` folder with the theme
+and the logos; it is rebuilt by `make-build.sh` and committed, so it always
+matches the template in this folder.
 
-Without the script: upload `main.tex` and the `gridlab/` folder as they are.
+To add the template to an Overleaf project you already have, upload `main.tex`
+and the `gridlab/` folder as they are — the zip is only a convenience for
+starting a new one.
 
 Overleaf must be set to TeX Live 2020 or newer (Menu → Settings → TeX Live
 version). Earlier versions do not provide `\CurrentFilePath`, which the theme
@@ -100,15 +102,16 @@ folder beside it.
 
 ```
 beamer/
-├── main.tex          the template
-├── gridlab/          the LaTeX package: theme + logos
+├── main.tex              the template
+├── gridlab/              the LaTeX package: theme + logos
 │   ├── beamerthemegridlab.sty
 │   ├── logo_gridlab.png
 │   └── logo_hesso.png
-├── demo/             feature tour, source and PDF
-├── install.sh        link gridlab/ into the TeX tree
-├── make-build.sh     build the PDFs and the Overleaf zip
-└── build/            output, git-ignored
+├── demo/                 feature tour, source and PDF
+├── beamer-overleaf.zip   main.tex + gridlab/, ready for Overleaf
+├── install.sh            link gridlab/ into the TeX tree
+├── make-build.sh         build the PDFs and the Overleaf zip
+└── build/                output, git-ignored
 ```
 
 ## Build
@@ -118,8 +121,10 @@ beamer/
 ```
 
 Writes `build/main.pdf`, `build/demo.pdf` and `build/beamer-overleaf.zip`, and
-refreshes `demo/demo.pdf`. No installation is required: `main.tex` finds the
-theme in `./gridlab`.
+refreshes the two build products tracked in the repo, `demo/demo.pdf` and
+`beamer-overleaf.zip`. Re-run it and commit those two whenever the theme or
+`main.tex` changes. No installation is required: `main.tex` finds the theme in
+`./gridlab`.
 
 ## What the theme provides
 

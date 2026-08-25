@@ -5,8 +5,9 @@
 #   build/demo.pdf              the feature tour in demo/
 #   build/beamer-overleaf.zip   main.tex + gridlab/, ready to drop on Overleaf
 #
-# demo/demo.pdf is refreshed from build/demo.pdf; it is the one build product
-# tracked in the repo.
+# demo/demo.pdf and beamer-overleaf.zip are refreshed from build/; they are the
+# build products tracked in the repo, so both can be downloaded straight from
+# GitHub without running this script.
 #
 # The theme is taken from ./gridlab when it is not installed in the TeX tree,
 # so nothing has to be installed first.
@@ -44,4 +45,5 @@ cp main.tex "$STAGE/"
 cp -R gridlab "$STAGE/gridlab"
 rm -f build/beamer-overleaf.zip
 (cd "$STAGE" && zip -qr "$HERE/build/beamer-overleaf.zip" . -x '*.DS_Store')
-echo "build/beamer-overleaf.zip"
+cp build/beamer-overleaf.zip beamer-overleaf.zip
+echo "build/beamer-overleaf.zip (also refreshed beamer-overleaf.zip)"
