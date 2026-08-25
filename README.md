@@ -2,30 +2,25 @@
 
 Templates for GridLab / HES-SO Valais-Wallis documents.
 
-**One folder per document type.** Everything that type needs lives inside it:
-the source, the assets it depends on, the script that builds it, and the
-build output. A type folder can be copied out or handed to someone on its
-own — nothing is shared behind its back.
-
 ```
 gridlab-templates/
 └── beamer/          presentation (LaTeX / Beamer)
 ```
 
-Types to come — `powerpoint/`, `letter/`, `article/`, `poster/` — are simply
-new folders next to `beamer/`, in whatever tooling suits them. No shared
-top level to keep in sync; if two types end up needing the same logo, each
-keeps its own copy.
+Each document type has its own folder, containing its source, its assets, its
+build script and its output. Further types — `powerpoint/`, `letter/`,
+`article/`, `poster/` — go in folders next to `beamer/`, in whatever tooling
+they use.
 
-Each type folder carries its own `README.md`; start there.
+See the README inside a type folder for how to use it.
 
-## Convention for a new type
+## Layout of a type folder
 
 ```
 <type>/
-├── README.md        what it is, how to build it, how to customise it
-├── <source files>   main.tex, the .pptx, ...
-├── <assets>         logos, styles, anything the source needs
-├── make-build.sh    produces everything under build/
+├── README.md        what it is, how to use and build it
+├── <source files>   main.tex, a .pptx, ...
+├── <assets>         logos, styles, whatever the source needs
+├── make-build.sh    writes everything into build/
 └── build/           output, git-ignored
 ```

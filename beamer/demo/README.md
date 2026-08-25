@@ -1,30 +1,25 @@
-# Demo — feature tour
+# Demo
 
-`demo.tex` is a presentation *about* the theme: 18 slides, each showing one
-feature and naming the macro behind it. Read it when you want to know what
-`beamerthemegridlab.sty` offers beyond plain Beamer, or copy a slide out of
-it as a starting point.
+`demo.tex` is a presentation about the theme: 18 slides, each showing one
+feature and naming the macro behind it, most with the source next to the
+result. `demo.pdf` is the compiled version, kept in the repo so it can be
+read without a TeX installation.
 
 Covered: title page and section dividers, `\topicslide`, blocks and columns,
 `fitemize`, the maths helpers (`\const`, `\uunderbrace`, `\vvector`,
-`\phase`), the text helpers (`\say`, `\todo`, `\LANG`, `\watermark`), the
-plot environments (`q1simpleplot`, `plot`, `phasorbox`, `phasorbox_clean`,
+`\phase`), the text helpers (`\say`, `\todo`, `\LANG`, `\watermark`), the plot
+environments (`q1simpleplot`, `plot`, `phasorbox`, `phasorbox_clean`,
 `\vectorarrow`, `\addplanelabel`), the TikZ flowchart styles, and rebranding.
-
-`demo.pdf` next to it is the compiled result, committed on purpose: it is
-the one build product in the repo, so the tour can be read without a TeX
-installation. `make-build.sh` refreshes it.
 
 ## Build
 
 ```sh
-../make-build.sh        # -> ../build/demo.pdf, copied here as demo.pdf
+../make-build.sh        # writes ../build/demo.pdf and copies it here
 ```
 
-Or, from this directory, `pdflatex demo.tex` twice.
+Or `pdflatex demo.tex` twice from this directory.
 
-Unlike `../main.tex`, this file loads the theme with an explicit relative
-path (`\usepackage{../gridlab/beamerthemegridlab}`), because it sits one
-level below the package. It has to be compiled from *this* directory for
-that path to resolve — which is what `make-build.sh` does. Start a real
-presentation from `../main.tex` instead, which is portable.
+`demo.tex` loads the theme by relative path
+(`\usepackage{../gridlab/beamerthemegridlab}`), so it has to be compiled from
+this directory. `../main.tex` uses the portable form instead and is the file
+to start a presentation from.

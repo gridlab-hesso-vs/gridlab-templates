@@ -5,11 +5,11 @@
 #   build/demo.pdf              the feature tour in demo/
 #   build/beamer-overleaf.zip   main.tex + gridlab/, ready to drop on Overleaf
 #
-# The demo is also copied to demo/demo.pdf, which is the one build product
-# committed to the repo, so the tour can be read without building anything.
+# demo/demo.pdf is refreshed from build/demo.pdf; it is the one build product
+# tracked in the repo.
 #
-# Needs nothing installed: the theme is picked up from ./gridlab when it is
-# not in the TeX tree.
+# The theme is taken from ./gridlab when it is not installed in the TeX tree,
+# so nothing has to be installed first.
 set -e
 
 HERE=$(cd "$(dirname "$0")" && pwd)
