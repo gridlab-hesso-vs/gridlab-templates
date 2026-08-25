@@ -15,7 +15,9 @@ Each document type has its own folder, containing its source, its assets, its
 build script and its output. Further types might come: `powerpoint/`, `letter/`,
 `article/`, `poster/`, and they will go in folders next to `beamer/`.
 
-See the README inside a type folder for how to use it.
+See the README inside a type folder for how to use it — including how to
+install the LaTeX theme locally on macOS, Linux and Windows, and how to
+take a template to Overleaf.
 
 ## Layout of a type folder
 

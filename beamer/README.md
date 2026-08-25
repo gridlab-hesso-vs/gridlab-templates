@@ -35,20 +35,58 @@ cd ~/somewhere/my-talk
 pdflatex main.tex && pdflatex main.tex     # twice: the frame counter
 ```
 
-The copy includes `gridlab/`, so nothing else is needed (MacTeX, TeX Live,
-MiKTeX).
+The copy includes `gridlab/`, so nothing has to be installed first. This works
+the same on macOS (MacTeX), Linux (TeX Live) and Windows (MiKTeX or TeX
+Live).
 
-To keep the theme in one place rather than in every talk, install it once:
+To keep the theme in one place rather than in every talk, install it once —
+that is, put the `gridlab` folder where TeX looks for packages, so
+`\usetheme{gridlab}` works from any `.tex` on the machine, logos included.
+
+**macOS (MacTeX) and Linux (TeX Live)**
 
 ```sh
 ./install.sh
 ```
 
-This symlinks `gridlab/` into `$TEXMFHOME/tex/latex` (macOS:
-`~/Library/texmf/tex/latex/gridlab`). `\usetheme{gridlab}` then works from any
-`.tex` on the machine, logos included, and `main.tex` can be copied on its
-own. Edits made here apply everywhere, since it is a symlink. Remove it with
-`rm ~/Library/texmf/tex/latex/gridlab`.
+It symlinks `gridlab/` into your personal tree — `~/Library/texmf/tex/latex/gridlab`
+on macOS, `~/texmf/tex/latex/gridlab` on Linux — so edits made here apply
+everywhere. `kpsewhich -var-value TEXMFHOME` prints the tree it uses, and
+`kpsewhich beamerthemegridlab.sty` prints a path once it worked. No `texhash`
+step is needed. Undo with
+`rm -r "$(kpsewhich -var-value TEXMFHOME)/tex/latex/gridlab"` — on a symlink that
+removes the link only, leaving this folder untouched.
+
+To copy instead of symlink:
+
+```sh
+mkdir -p "$(kpsewhich -var-value TEXMFHOME)/tex/latex"
+cp -R gridlab "$(kpsewhich -var-value TEXMFHOME)/tex/latex/"
+```
+
+**Windows, MiKTeX**
+
+1. Open MiKTeX Console → *Settings* → *Directories*. If no user root
+   directory is listed, add one, e.g. `C:\Users\<you>\texmf`.
+2. Copy the `gridlab` folder into `tex\latex\` inside that root, so that
+   `C:\Users\<you>\texmf\tex\latex\gridlab\beamerthemegridlab.sty` exists.
+3. MiKTeX Console → *Tasks* → *Refresh file name database*.
+
+**Windows, TeX Live**
+
+Copy the `gridlab` folder into `%USERPROFILE%\texmf\tex\latex\` — the tree
+`kpsewhich -var-value TEXMFHOME` prints. No refresh step.
+
+```powershell
+mkdir "$env:USERPROFILE\texmf\tex\latex" -Force
+Copy-Item -Recurse gridlab "$env:USERPROFILE\texmf\tex\latex\"
+```
+
+On either Windows distribution, `install.sh` also works as-is from Git Bash
+or WSL. Check the result with `kpsewhich beamerthemegridlab.sty`.
+
+Once installed, `main.tex` can be copied on its own, without the `gridlab`
+folder beside it.
 
 `main.tex` covers both cases:
 
