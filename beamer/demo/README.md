@@ -11,10 +11,14 @@ Covered: title page and section dividers, `\topicslide`, blocks and columns,
 plot environments (`q1simpleplot`, `plot`, `phasorbox`, `phasorbox_clean`,
 `\vectorarrow`, `\addplanelabel`), the TikZ flowchart styles, and rebranding.
 
+`demo.pdf` next to it is the compiled result, committed on purpose: it is
+the one build product in the repo, so the tour can be read without a TeX
+installation. `make-build.sh` refreshes it.
+
 ## Build
 
 ```sh
-../make-build.sh        # -> ../build/demo.pdf (and the template + zip)
+../make-build.sh        # -> ../build/demo.pdf, copied here as demo.pdf
 ```
 
 Or, from this directory, `pdflatex demo.tex` twice.

@@ -1,21 +1,62 @@
-# LaTeX build artefacts
+# ---------------------------------------------------------------------------
+#  LaTeX intermediates — regenerated on every compile, never worth committing
+# ---------------------------------------------------------------------------
 *.aux
+*.auxlock
+*.bbl
+*.bcf
+*.blg
+*.brf
+*.dvi
+*.fdb_latexmk
+*.figlist
+*.fls
+*.idx
+*.ilg
+*.ind
+*.lof
 *.log
+*.lot
 *.nav
 *.out
+*.run.xml
 *.snm
+*.spl
+*.synctex.gz
+*.synctex(busy)
 *.toc
 *.vrb
-*.fls
-*.fdb_latexmk
-*.synctex.gz
-*.bbl
-*.blg
-*.run.xml
-*.bcf
+*.xdv
 
-# Per-type build output (compiled examples, Overleaf zips)
+# TikZ / pgfplots externalisation and gnuplot side files
+*.dpth
+*.md5
+*.pgf-plot.gnuplot
+*.pgf-plot.table
+
+# ---------------------------------------------------------------------------
+#  Build output — produced by each type's make-build.sh
+# ---------------------------------------------------------------------------
 build/
 
-# macOS
+# Compiled PDFs sitting next to their source (hand compiles, previews).
+# The one PDF meant to be read straight from the repo is the demo, kept below.
+*.pdf
+!beamer/demo/demo.pdf
+
+# ---------------------------------------------------------------------------
+#  Editors and OS junk
+# ---------------------------------------------------------------------------
+*~
+*.bak
+*.swp
+*.tmp
+.vscode/
+.idea/
+*.sublime-workspace
 .DS_Store
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db
+desktop.ini

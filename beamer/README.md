@@ -68,8 +68,11 @@ its own logos from a project subfolder.
 
 `demo/demo.tex` is a tour of it: title page and dividers, blocks, filled
 lists, the maths and text helpers, the plot and phasor environments, the
-flowchart styles. Build it (`build/demo.pdf`) and flip through — each slide
-names the macro that produced it.
+flowchart styles. Each slide names the macro that produced it, and most put
+the source next to the result.
+
+Read it without building anything: **`demo/demo.pdf`** is committed and kept
+up to date by `make-build.sh`.
 
 ## Customise
 
