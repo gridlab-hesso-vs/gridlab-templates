@@ -1,0 +1,172 @@
+% ============================================================================
+%  demo.tex -- a real exam written with examsheet.sty, used as the feature
+%  tour for the template.  Compile from THIS directory (it loads the package
+%  by relative path); ../main.tex is the file to start a new exam from.
+%
+%      pdflatex demo.tex && pdflatex demo.tex          the exam
+%      pdflatex -jobname=demo-solutions \
+%          "\PassOptionsToPackage{solutions}{examsheet}\input{demo.tex}"
+%                                                      the answer key
+%  or just ../make-build.sh, which does both.
+% ============================================================================
+\documentclass[11pt,a4paper]{article}
+\usepackage[french]{../examsheet/examsheet}
+
+\usetikzlibrary{positioning}
+
+\examtitle{MA-ElPowSys -- Final written test}
+\examsubtitle{AY 2025--2026}
+\examshorttitle{MA-ElPowSys -- Final written test}
+\examduration{2 h}
+
+\examinstructions{%
+  Écrivez votre prénom et votre nom dans l'espace prévu à cet effet en haut de
+  chaque feuille. Seules ces feuilles doivent être remises. Écrivez vos
+  réponses finales dans les espaces prévus. Utilisez du brouillon pour les
+  esquisses et les calculs intermédiaires, qui ne doivent pas être remis. Tout
+  écart sera pénalisé.%
+}
+\exammaterial{%
+  Seule une feuille de résumé recto-verso manuscrite est autorisée. Téléphone,
+  ordinateur portable, tablette, etc.\ sont interdits. Toute communication est
+  interdite.%
+}
+
+\begin{document}
+\makeexamtitle
+
+% ===========================================================================
+\question{Ligne électrique}
+
+\subquestion[1.5]{Une centrale de 500~MW alimente une ville par une ligne
+électrique dont la résistance totale est de 5~$\Omega$. Quel niveau de tension
+choisissez-vous pour que les pertes ne dépassent pas 2~\%\,? Expliquez votre
+choix.}
+\verylonganswer
+\begin{solution}
+  Les pertes valent $P_\mathrm{loss} = R\,I^2$ avec $I = P/(\sqrt{3}V)$ pour
+  une ligne triphasée, d'où
+  $P_\mathrm{loss}/P = R\,P/V^2$ et
+  $V \ge \sqrt{R\,P/0.02} = \sqrt{5\cdot 500\cdot 10^6/0.02} \approx 354$~kV.
+  On retient le niveau normalisé immédiatement supérieur, soit 380--400~kV.
+\end{solution}
+
+\subquestion[1.5]{Une ligne de 750~kV a une impédance série
+$Z = 7.2\cdot10^{-4} + j\,1.75\cdot10^{-2}$~p.u. Les tensions aux deux
+extrémités de la ligne sont $V_1 = 0.98$ et $V_2 = 0.96$~p.u., et la
+différence des angles de tension est $\theta_1 - \theta_2 = 22^\circ$. Quelles
+sont les puissances active et réactive transmises\,?}
+\longanswer
+
+% ===========================================================================
+\question[2]{Écoulement de puissance (power flow)}
+
+Définir en détail et écrire les équations de power flow pour le réseau de la
+figure ci-dessous. Discuter des variables à déterminer à chaque bus et des
+grandeurs à fixer préalablement pour poser ce problème.
+
+% A figure of your own goes in with \includegraphics, as usual:
+%     \includegraphics[width=0.5\textwidth]{Figpf.pdf}
+% This one is drawn inline so that the demo needs no external file.
+\begin{figure}[h!]
+  \centering
+  \begin{tikzpicture}[
+      bus/.style={draw, fill=black, minimum width=1.6cm, minimum height=1.2pt,
+                  inner sep=0pt},
+      line width=0.7pt]
+    \node[bus] (b1) at (0,0)   {};
+    \node[bus] (b2) at (4,0)   {};
+    \node[bus] (b3) at (2,-2.2){};
+    \draw (b1.east) -- (b2.west);
+    \draw (b1.south) -- (b3.west);
+    \draw (b2.south) -- (b3.east);
+    \node[above=1.5mm of b1] {\small Bus 1};
+    \node[above=1.5mm of b2] {\small Bus 2};
+    \node[below=1.5mm of b3] {\small Bus 3};
+    \draw[-latex] (b1.west) -- ++(-1,0.8) node[above left]  {\small $G_1$};
+    \draw[-latex] (b2.east) -- ++(1,0.8)  node[above right] {\small $G_2$};
+    \draw[-latex] (b3.east) -- ++(1,-0.7) node[below right] {\small $S_{L3}$};
+  \end{tikzpicture}
+\end{figure}
+
+\longanswer
+
+% ===========================================================================
+\question{Régulateur de turbine avec droop}
+
+\subquestion[1.5]{Dessinez le schéma d'un régulateur de turbine (governor)
+avec coefficient de droop. Utilisez une fonction de transfert générique $T(s)$
+pour représenter la dynamique de la centrale et du générateur.}
+\mediumanswer
+
+\subquestion[1]{Définissez tous les symboles utilisés, y compris les unités de
+mesure pour chaque entrée et sortie lorsque cela est pertinent.}
+\mediumanswer
+
+% ===========================================================================
+\question{Coefficient de droop}
+
+\subquestion[0.5]{D'un point de vue dimensionnel, à quoi correspond le
+coefficient de droop\,?}
+\mediumanswer
+
+\subquestion[1]{Si le coefficient de droop est de 5~\% (en per unit), que
+signifie-t-il en termes de réponse en régime permanent de la fréquence\,?}
+\mediumanswer
+
+\subquestion[0.5]{À quel type de contrôleur correspond un coefficient de droop
+nul\,?}
+\mediumanswer
+\begin{solution}
+  À un contrôleur isochrone: la fréquence est ramenée exactement à sa valeur
+  de consigne, ce qui empêche le partage de charge entre plusieurs unités.
+\end{solution}
+
+% ===========================================================================
+\question{Système à deux zones}
+
+On considère un système à deux zones modélisé par deux équations de swing,
+connectées par une ligne de réactance $X$.
+
+\subquestion[1]{D'un point de vue intuitif (physique), que signifie avoir une
+réactance $X$ grande ou petite\,?}
+\mediumanswer
+
+\subquestion[1]{Écrivez l'équation du transfert de puissance active entre les
+deux bus en fonction des phaseurs de tension aux extrémités (introduisez votre
+propre notation).}
+\mediumanswer
+
+\newpage
+% ===========================================================================
+\question{Régulation secondaire de fréquence}
+
+\subquestion[0.5]{Expliquez son rôle.}
+\mediumanswer
+
+\subquestion[0.5]{Comment est-elle implémentée en termes de contrôleur\,?}
+\mediumanswer
+
+% ===========================================================================
+\question{Vrai ou faux}
+
+Répondez vrai ou faux et justifiez brièvement.
+
+\begin{truefalse}
+  \tfitem[0.375]{Le contrôle primaire de fréquence est un mécanisme
+  décentralisé.}
+  \tfitem[0.375]{Le contrôle primaire de fréquence est un mécanisme
+  centralisé.}
+  \tfitem[0.375]{Le contrôle primaire et le contrôle secondaire de fréquence
+  agissent sur la même échelle de temps.}
+  \tfitem[0.375]{Le coefficient de droop dans une centrale réelle est
+  typiquement nul.}
+\end{truefalse}
+
+% ===========================================================================
+%  The marking table lists every question with its points and a box for the
+%  score.  It can go here or on the front page, right after \makeexamtitle.
+\newpage
+\markingtable
+
+\end{document}

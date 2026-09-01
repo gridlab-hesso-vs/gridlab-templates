@@ -8,12 +8,13 @@ Templates for GridLab / HES-SO Valais-Wallis documents.
 
 ```
 gridlab-templates/
-└── beamer/          presentation (LaTeX / Beamer)
+├── beamer/          presentation (LaTeX / Beamer)
+└── exam/            written exam (LaTeX)
 ```
 
 Each document type has its own folder, containing its source, its assets, its
 build script and its output. Further types might come: `powerpoint/`, `letter/`,
-`article/`, `poster/`, and they will go in folders next to `beamer/`.
+`article/`, `poster/`, and they will go in folders next to these.
 
 See the README inside a type folder for how to use it — including how to
 install the LaTeX theme locally on macOS, Linux and Windows, and how to

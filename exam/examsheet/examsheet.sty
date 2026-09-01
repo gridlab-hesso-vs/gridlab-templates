@@ -1,0 +1,436 @@
+% ============================================================================
+%  examsheet.sty -- a written-exam sheet: numbered questions, automatic point
+%  totals, ruled/grid answer space, and an optional answer key.
+%
+%  Usage:
+%      \documentclass[11pt,a4paper]{article}
+%      \usepackage[french]{examsheet}      % or [english]
+%
+%  Options
+%      french | english   labels used by the package (default: french)
+%      solutions          typeset the answer key: reveal `solution'
+%                         environments and drop the blank answer space
+%      keepspace          in solutions mode, keep the answer space as well
+%      nobabel            do not load babel (load it yourself)
+%
+%  Points are declared once, on the subquestions, and everything else is
+%  counted from them: the total shown next to each question heading, the
+%  grand total on the front page, and the marking table.  This needs TWO
+%  pdflatex passes, exactly like a table of contents; until the second pass
+%  the totals show as "??".
+%
+%  Deliberately neutral: no logo, no institutional colour, black on white so
+%  it photocopies cleanly.
+% ============================================================================
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{examsheet}[2026/08/31 v1.0 Written exam sheet]
+
+% ---------------------------------------------------------------------------
+%  Options
+% ---------------------------------------------------------------------------
+\newif\ifexs@solutions \exs@solutionsfalse
+\newif\ifexs@keepspace \exs@keepspacefalse
+\newif\ifexs@babel     \exs@babeltrue
+\def\exs@lang{french}
+
+\DeclareOption{solutions}{\exs@solutionstrue}
+\DeclareOption{keepspace}{\exs@keepspacetrue}
+\DeclareOption{french}{\def\exs@lang{french}}
+\DeclareOption{english}{\def\exs@lang{english}}
+\DeclareOption{nobabel}{\exs@babelfalse}
+\DeclareOption*{\PackageWarning{examsheet}{Unknown option '\CurrentOption'}}
+\ProcessOptions\relax
+
+% ---------------------------------------------------------------------------
+%  Packages
+% ---------------------------------------------------------------------------
+\RequirePackage[utf8]{inputenc}      % harmless on modern kernels (UTF-8 already)
+\RequirePackage[T1]{fontenc}
+\RequirePackage{helvet}              % Helvetica clone: legible when photocopied
+\renewcommand{\familydefault}{\sfdefault}
+\RequirePackage{amsmath,amssymb,mathtools}
+\RequirePackage{graphicx}
+\RequirePackage{array}
+\RequirePackage{enumitem}
+\RequirePackage{xcolor}
+\RequirePackage{tikz}
+\RequirePackage{environ}
+\RequirePackage{etoolbox}
+\RequirePackage{fancyhdr}
+\RequirePackage[parfill]{parskip}
+\RequirePackage[a4paper,margin=2cm,headheight=16pt,headsep=8mm,footskip=12mm]{geometry}
+\ifexs@babel \RequirePackage[\exs@lang]{babel}\fi
+\RequirePackage[colorlinks=true,allcolors=black,hidelinks]{hyperref}
+\RequirePackage{lastpage}            % after hyperref, so \pageref{LastPage} is right
+
+% Page geometry is set above with sensible exam margins; override it in your
+% document with \geometry{...}, geometry is already loaded.
+
+% ---------------------------------------------------------------------------
+%  Colours -- greys only, so the sheet prints identically in black and white.
+%  The one exception is the answer key, which is meant to be read on screen.
+% ---------------------------------------------------------------------------
+\definecolor{exsrule}{gray}{0.72}    % the answer grid / ruling
+\definecolor{exssubtle}{gray}{0.35}  % point tags, small print
+\definecolor{exssol}{HTML}{0B6B3A}   % answer key green
+\definecolor{exswarn}{HTML}{B00020}  % "?? pts", i.e. rerun pdflatex
+
+% ---------------------------------------------------------------------------
+%  Labels
+% ---------------------------------------------------------------------------
+\def\exs@french{french}
+\ifx\exs@lang\exs@french
+  \def\exslblname{Nom, prénom}
+  \def\exslblid{N\textsuperscript{o} étudiant}
+  \def\exslblpage{Page}
+  \def\exslblpts{pts}
+  \def\exslblpt{pt}
+  \def\exslblq{Q}
+  \def\exslbltotal{Total}
+  \def\exslblduration{Durée}
+  \def\exslbldate{Date}
+  \def\exslblquestion{Question}
+  \def\exslblsubject{Sujet}
+  \def\exslblscore{Note}
+  \def\exslblsol{Corrigé}
+  \def\exslblkey{CORRIGÉ}
+  \def\exslbltrue{Vrai}
+  \def\exslblfalse{Faux}
+  \def\exslblinstr{Instructions}
+  \def\exslblmaterial{Matériel autorisé et règles}
+  \def\exslblrerun{compilez une seconde fois}
+\else
+  \def\exslblname{Last name, first name}
+  \def\exslblid{Student ID}
+  \def\exslblpage{Page}
+  \def\exslblpts{pts}
+  \def\exslblpt{pt}
+  \def\exslblq{Q}
+  \def\exslbltotal{Total}
+  \def\exslblduration{Duration}
+  \def\exslbldate{Date}
+  \def\exslblquestion{Question}
+  \def\exslblsubject{Topic}
+  \def\exslblscore{Score}
+  \def\exslblsol{Solution}
+  \def\exslblkey{ANSWER KEY}
+  \def\exslbltrue{True}
+  \def\exslblfalse{False}
+  \def\exslblinstr{Instructions}
+  \def\exslblmaterial{Permitted material and rules}
+  \def\exslblrerun{run pdflatex again}
+\fi
+
+% ---------------------------------------------------------------------------
+%  Exam metadata -- set these in your preamble
+% ---------------------------------------------------------------------------
+\def\exs@title{}     \newcommand{\examtitle}[1]{\def\exs@title{#1}}
+\def\exs@subtitle{}  \newcommand{\examsubtitle}[1]{\def\exs@subtitle{#1}}
+\def\exs@short{}     \newcommand{\examshorttitle}[1]{\def\exs@short{#1}}
+\def\exs@date{}      \newcommand{\examdate}[1]{\def\exs@date{#1}}
+\def\exs@duration{}  \newcommand{\examduration}[1]{\def\exs@duration{#1}}
+\def\exs@instr{}     \newcommand{\examinstructions}[1]{\def\exs@instr{#1}}
+\def\exs@material{}  \newcommand{\exammaterial}[1]{\def\exs@material{#1}}
+
+% ---------------------------------------------------------------------------
+%  Point arithmetic
+%  LaTeX counters are integers, and points are not (1.5, 0.5, ...), so the
+%  running totals are kept in expl3 floating-point registers.
+% ---------------------------------------------------------------------------
+\ExplSyntaxOn
+\fp_new:N \g__exs_total_fp                                   % whole exam
+\fp_new:N \g__exs_question_fp                                % current question
+\cs_new_protected:Npn \exsaddsub #1 { \fp_gadd:Nn \g__exs_question_fp {#1} }
+\cs_new_protected:Npn \exsaddtotal #1 { \fp_gadd:Nn \g__exs_total_fp {#1} }
+\cs_new_protected:Npn \exsqzero { \fp_gzero:N \g__exs_question_fp }
+\cs_new:Npn \exsqsum { \fp_to_decimal:N \g__exs_question_fp }
+\cs_new:Npn \exsgrandtotal { \fp_to_decimal:N \g__exs_total_fp }
+\cs_new:Npn \exsfmt #1 { \fp_to_decimal:n {#1} }             % 1.50 -> 1.5
+\cs_new:Npn \exsptslbl #1 { \fp_compare:nTF { abs(#1) = 1 } { \exslblpt } { \exslblpts } }
+\ExplSyntaxOff
+
+% "1 pt", "1.5 pts" -- the number and its unit, correctly singular or plural.
+\newcommand{\exspoints}[1]{\exsfmt{#1}~\exsptslbl{#1}}
+
+% ---- what comes back from the .aux on the second pass ---------------------
+\newcommand{\exs@qlist}{}          % the marking-table rows
+\def\exs@grand{??}                 % grand total
+\newif\ifexs@rerun \exs@rerunfalse
+
+% Written to the .aux at the end of every question, read back on the next run.
+\newcommand{\exs@setq}[3]{%          #1 number  #2 points  #3 title
+  \global\@namedef{exs@qpts@#1}{#2}%
+  \g@addto@macro\exs@qlist{\exs@qrow{#1}{#3}{#2}}%
+}
+\newcommand{\exs@settotal}[1]{\gdef\exs@grand{#1}}
+\newcommand{\exs@qrow}[3]{}        % redefined inside \markingtable
+
+% ---------------------------------------------------------------------------
+%  Questions and subquestions
+% ---------------------------------------------------------------------------
+\newcounter{question}
+\newcounter{subquestion}[question]
+\renewcommand{\thequestion}{\arabic{question}}
+\renewcommand{\thesubquestion}{\alph{subquestion}}
+
+\def\exs@qopen{}      % number of the question currently being typeset
+\def\exs@qfixed{}     % its explicit point value, if one was given
+\def\exs@qtitle{}
+
+% Close the running question: work out its total, add it to the exam total,
+% and record both in the .aux for the next run.
+\newcommand{\exs@closequestion}{%
+  \ifx\exs@qopen\@empty\else
+    \ifx\exs@qfixed\@empty
+      \edef\exs@qtot{\exsqsum}%
+    \else
+      \edef\exs@qtot{\exsfmt{\exs@qfixed}}%
+    \fi
+    \exsaddtotal{\exs@qtot}%
+    \protected@write\@auxout{}{\string\exs@setq{\exs@qopen}{\exs@qtot}{\exs@qtitle}}%
+    \gdef\exs@qopen{}%
+  \fi
+}
+
+% The point tag printed next to a question heading.  Its value is only known
+% once the whole question has been read, hence the .aux round trip.
+\newcommand{\exs@qpoints}{%
+  \@ifundefined{exs@qpts@\thequestion}%
+    {\global\exs@reruntrue\textcolor{exswarn}{(?? \exslblpts)}}%
+    {(\exspoints{\@nameuse{exs@qpts@\thequestion}})}%
+}
+
+% \question[<points>]{<title>}
+%   Points are normally left out and summed from the subquestions.  Give them
+%   here for a question that has no subquestions.
+\newcommand{\question}[2][]{%
+  \exs@closequestion
+  \par\addvspace{\bigskipamount}\penalty-150
+  \refstepcounter{question}%
+  \xdef\exs@qopen{\thequestion}%
+  \def\exs@qfixed{#1}%
+  \def\exs@qtitle{#2}%
+  \exsqzero
+  \noindent{\large\bfseries\exslblq\thequestion: #2}%
+  \nobreak\hfill\mbox{\normalsize\mdseries\exs@qpoints}%
+  \par\nobreak\vspace{1mm}\nobreak
+}
+
+% \subquestion[<points>]{<text>}   (alias: \subq)
+\newcommand{\subquestion}[2][]{%
+  \par\addvspace{\medskipamount}\penalty-100
+  \refstepcounter{subquestion}%
+  \def\exs@sp{#1}%
+  \ifx\exs@sp\@empty\else\exsaddsub{#1}\fi
+  \noindent\textbf{(\thesubquestion)}~#2%
+  \ifx\exs@sp\@empty\else
+    \nobreak\hfill\mbox{\small\textcolor{exssubtle}{(\exspoints{#1})}}%
+  \fi
+  \par\nobreak\vspace{1mm}\nobreak
+}
+\let\subq\subquestion
+
+\AtEndDocument{%
+  \exs@closequestion
+  \protected@write\@auxout{}{\string\exs@settotal{\exsgrandtotal}}%
+  \ifexs@rerun\PackageWarning{examsheet}{Point totals are out of date --
+    \exslblrerun\space(rerun pdflatex)}\fi
+}
+
+% ---------------------------------------------------------------------------
+%  Answer space
+%
+%  \answergrid{n}   squared paper, n rows of \answergridstep
+%  \answerlines{n}  n ruled lines
+%  \answerblank{h}  h of empty space
+%  and the four named sizes below.  In solutions mode the space collapses,
+%  unless the package was loaded with [keepspace].
+% ---------------------------------------------------------------------------
+\providecommand{\answergridstep}{0.4}    % cm; also the ruled-line spacing
+
+% Full text width, rounded down to a whole number of cells.
+%
+% The grid is drawn one row at a time rather than as a single picture, so that
+% it can break over a page boundary: a tall answer space at the bottom of a
+% page continues on the next one instead of jumping to it and leaving a hole.
+% Rows are stacked with no leading, so the result is indistinguishable from
+% one drawn in a single \draw.
+\newcommand{\exs@grid}[1]{%
+  \par\nobreak\vspace{1mm}%
+  \begingroup
+  \pgfmathtruncatemacro{\exs@ncols}{\linewidth/(\answergridstep*28.45276)}%
+  \setlength{\parskip}{0pt}\setlength{\parindent}{0pt}%
+  % Force the \lineskip branch of TeX's interline-glue rule, with \lineskip
+  % at zero, so consecutive row boxes touch exactly.
+  \setlength{\lineskip}{0pt}\lineskiplimit=\maxdimen
+  \@tempcnta=0
+  \loop\ifnum\@tempcnta<#1\relax
+    \noindent\begin{tikzpicture}
+      \draw[step=\answergridstep cm, exsrule, very thin]
+        (0,0) grid ({\exs@ncols*\answergridstep},{\answergridstep});
+    \end{tikzpicture}\par\penalty0
+    \advance\@tempcnta by 1
+  \repeat
+  \endgroup
+  \par\vspace{1mm}%
+}
+
+\newcommand{\exs@lines}[1]{%
+  \par\nobreak\vspace{1mm}%
+  \begingroup\color{exsrule}%
+  \@tempcnta=0
+  \loop\ifnum\@tempcnta<#1\relax
+    \noindent\rule{\linewidth}{0.4pt}\par\vspace{\answergridstep cm}%
+    \advance\@tempcnta by 1
+  \repeat
+  \endgroup
+  \par\vspace{1mm}%
+}
+
+% The one gate: everything that reserves blank space goes through here.
+\newcommand{\exs@space}[1]{%
+  \ifexs@solutions
+    \ifexs@keepspace #1\fi
+  \else #1\fi
+}
+\newcommand{\answergrid}[1]{\exs@space{\exs@grid{#1}}}
+\newcommand{\answerlines}[1]{\exs@space{\exs@lines{#1}}}
+\newcommand{\answerblank}[1]{\exs@space{\par\vspace{#1}}}
+\let\checkedpattern\answergrid     % name used by earlier versions of this template
+
+\newcommand{\shortanswer}{\answergrid{3}}
+\newcommand{\mediumanswer}{\answergrid{8}}
+\newcommand{\longanswer}{\answergrid{15}}
+\newcommand{\verylonganswer}{\answergrid{25}}
+
+% ---------------------------------------------------------------------------
+%  Tick boxes, true/false, multiple choice
+% ---------------------------------------------------------------------------
+% A square box to tick.  \fboxsep is zeroed locally, otherwise the frame is
+% padded by 3pt and comes out as a tall rectangle.
+\newcommand{\tickbox}{%
+  \begingroup\setlength{\fboxsep}{0pt}%
+  \raisebox{-0.25ex}{\framebox[2.1ex]{\rule{0pt}{1.9ex}}}%
+  \endgroup}
+\newcommand{\truefalsebox}{\tickbox\ \exslbltrue\qquad\tickbox\ \exslblfalse}
+
+\providecommand{\tfrows}{3}        % answer space under each true/false item
+
+% \begin{truefalse} \tfitem[<pts>]{<statement>} ... \end{truefalse}
+\newenvironment{truefalse}
+  {\begin{enumerate}[label=\alph*), leftmargin=*, itemsep=1mm, topsep=1mm]}
+  {\end{enumerate}}
+\newcommand{\tfitem}[2][]{%
+  \item #2%
+  \def\exs@tp{#1}%
+  \ifx\exs@tp\@empty\else
+    \exsaddsub{#1}%
+    \nobreak\hfill\mbox{\small\textcolor{exssubtle}{(\exspoints{#1})}}%
+  \fi
+  \par\vspace{1mm}\truefalsebox
+  \answergrid{\tfrows}%
+}
+
+% \begin{choices} \choice{...} \choice{...} \end{choices}
+\newenvironment{choices}
+  {\begin{itemize}[label=\tickbox, leftmargin=*, itemsep=1mm, topsep=1mm]}
+  {\end{itemize}}
+\newcommand{\choice}[1]{\item #1}
+
+% ---------------------------------------------------------------------------
+%  Answer key
+%  \begin{solution} ... \end{solution}  or  \sol{...}
+%  Typeset only under the [solutions] option; the body is dropped otherwise.
+% ---------------------------------------------------------------------------
+\newlength{\exs@solw}
+\newcommand{\exs@solbox}[1]{%
+  \par\nobreak\vspace{1mm}%
+  \setlength{\exs@solw}{\linewidth}\addtolength{\exs@solw}{-9mm}%
+  \noindent\begin{tikzpicture}
+    \node[draw=exssol, fill=exssol!6, rounded corners=1mm, line width=0.6pt,
+          inner sep=2.5mm, text width=\exs@solw, align=left, anchor=north west]
+      at (0,0) {\small\textcolor{exssol}{\textbf{\exslblsol.}}\ #1};
+  \end{tikzpicture}%
+  \par\vspace{1mm}%
+}
+\ifexs@solutions
+  \NewEnviron{solution}{\exs@solbox{\BODY}}
+  \newcommand{\sol}[1]{\exs@solbox{#1}}
+\else
+  \NewEnviron{solution}{}
+  \newcommand{\sol}[1]{}
+\fi
+
+% ---------------------------------------------------------------------------
+%  Marking table -- one row per question, filled in from the .aux
+% ---------------------------------------------------------------------------
+\newcommand{\markingtable}{%
+  \begingroup
+  \small
+  \renewcommand{\exs@qrow}[3]{\exslblq##1 & ##2 & ##3 & \\\hline}%
+  \setlength{\extrarowheight}{3.5pt}%
+  \begin{center}
+  \begin{tabular}{|c|p{0.46\linewidth}|c|c|}
+    \hline
+    \textbf{\exslblquestion} & \textbf{\exslblsubject} &
+    \textbf{\exslblpts} & \textbf{\exslblscore}\\\hline\hline
+    \exs@qlist
+    \multicolumn{2}{|r|}{\textbf{\exslbltotal}} & \textbf{\exs@grand} & \\\hline
+  \end{tabular}
+  \end{center}
+  \endgroup
+}
+
+% ---------------------------------------------------------------------------
+%  Front page and running head
+% ---------------------------------------------------------------------------
+% A labelled field with a rule to write on: \examfield{Nom}{6cm}
+\newcommand{\examfield}[2]{\mbox{#1:}~\rule[-0.6ex]{#2}{0.4pt}}
+
+\newcommand{\exs@keytag}{\ifexs@solutions\ \textcolor{exssol}{[\exslblkey]}\fi}
+
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0pt}
+\lhead{\small\examfield{\exslblname}{5cm}}
+\rhead{\small\ifx\exs@short\@empty\exs@title\else\exs@short\fi\exs@keytag}
+\cfoot{\small\exslblpage\ \thepage/\pageref{LastPage}}
+
+% \makeexamtitle -- title block, identification fields, instructions.
+\newcommand{\makeexamtitle}{%
+  \thispagestyle{fancy}%
+  \begin{center}
+    {\Large\bfseries\exs@title\exs@keytag\par}
+    \ifx\exs@subtitle\@empty\else{\vspace{1mm}\large\exs@subtitle\par}\fi
+    \vspace{2mm}
+    % Date, duration and total, separated by bullets -- with the separator
+    % appearing only between the items that were actually set.
+    {\small
+      \def\exs@sep{}%
+      \ifx\exs@date\@empty\else
+        \exs@sep\exslbldate: \exs@date\def\exs@sep{\quad\textbullet\quad}\fi
+      \ifx\exs@duration\@empty\else
+        \exs@sep\exslblduration: \exs@duration\def\exs@sep{\quad\textbullet\quad}\fi
+      \exs@sep\exslbltotal: \exs@grand~\exslblpts\par}
+  \end{center}
+  \vspace{2mm}
+  % Side by side in boxes, so a long label cannot break across lines.
+  \noindent
+  \begin{minipage}[t]{0.60\linewidth}\raggedright
+    \examfield{\exslblname}{6cm}
+  \end{minipage}\hfill
+  \begin{minipage}[t]{0.36\linewidth}\raggedleft
+    \examfield{\exslblid}{3.2cm}
+  \end{minipage}
+  \par\vspace{3mm}
+  \ifx\exs@instr\@empty\else
+    \noindent\textbf{\exslblinstr}\par\nobreak\exs@instr\par\vspace{2mm}
+  \fi
+  \ifx\exs@material\@empty\else
+    \noindent\textbf{\exslblmaterial}\par\nobreak\exs@material\par\vspace{2mm}
+  \fi
+  \noindent\rule{\linewidth}{1.2pt}
+  \par\vspace{1mm}
+}
+
+\endinput

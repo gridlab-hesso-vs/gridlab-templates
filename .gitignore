@@ -40,9 +40,11 @@
 build/
 
 # Compiled PDFs sitting next to their source (hand compiles, previews).
-# The one PDF meant to be read straight from the repo is the demo, kept below.
+# The PDFs meant to be read straight from the repo are the demos, kept below.
 *.pdf
 !beamer/demo/demo.pdf
+!exam/demo/demo.pdf
+!exam/demo/demo-solutions.pdf
 
 # ---------------------------------------------------------------------------
 #  Editors and OS junk

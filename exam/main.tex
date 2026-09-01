@@ -1,0 +1,83 @@
+% ============================================================================
+%  F Sossan HES-SO VS, template for written exams.
+%  For the answer key, add the [solutions] option below, or build both with
+%  ./make-build.sh.  "Below" is the \usepackage line: write [french,solutions]
+%  in both branches, and every \sol{} or solution environment is then printed
+%  instead of being dropped.
+% ============================================================================
+\documentclass[11pt,a4paper]{article}
+
+% Loads the package from ./examsheet when it sits next to this file (Overleaf,
+% or a copy you were sent), and from the TeX tree when it was installed with
+% ./install.sh.  Options: french|english, solutions, keepspace, nobabel.
+\IfFileExists{examsheet/examsheet.sty}
+  {\usepackage[french]{examsheet/examsheet}}
+  {\usepackage[french]{examsheet}}
+
+% ---------------------------------------------------------------------------
+%  Exam identity
+% ---------------------------------------------------------------------------
+\examtitle{Course code -- Final written test}
+\examsubtitle{AY 2025--2026}
+\examshorttitle{Final test}          % what goes in the running head
+\examdate{\today}
+\examduration{2 h}
+
+\examinstructions{%
+  Écrivez votre prénom et votre nom en haut de chaque feuille. Seules ces
+  feuilles doivent être remises. Écrivez vos réponses finales dans les espaces
+  prévus. Utilisez du brouillon pour les esquisses et les calculs
+  intermédiaires, qui ne doivent pas être remis. Tout écart sera pénalisé.%
+}
+\exammaterial{%
+  Seule une feuille de résumé recto-verso manuscrite est autorisée. Téléphone,
+  ordinateur portable, tablette, etc.\ sont interdits. Toute communication est
+  interdite.%
+}
+
+\begin{document}
+\makeexamtitle
+
+% Optional: a marking table listing every question, its points and a box for
+% the score.  It fills itself in from the questions below, on the second pass.
+% \markingtable
+
+% ===========================================================================
+%  QUESTIONS -- replace everything below with your own
+%
+%  \question{Title}                  points are summed from the subquestions
+%  \question[2]{Title}               ... or given here if there are none
+%  \subquestion[1.5]{Text}           lettered (a), (b), (c), ...
+%
+%  Answer space: \shortanswer  \mediumanswer  \longanswer  \verylonganswer
+%                \answergrid{n}  \answerlines{n}  \answerblank{5cm}
+%
+%  \begin{solution} ... \end{solution}  and  \sol{...} are printed only when
+%  the package is loaded with [solutions].
+% ===========================================================================
+
+\question{A question with subquestions}
+
+\subquestion[1.5]{First thing you ask. Its points are counted into the
+question heading and into the exam total automatically.}
+\mediumanswer
+
+\subquestion[1]{Second thing you ask.}
+\shortanswer
+\begin{solution}
+  What you expect to read, shown only in the answer key.
+\end{solution}
+
+\question[2]{A question with no subquestions}
+
+Ask it here, then leave room for the answer.
+\longanswer
+
+\question{True or false}
+
+\begin{truefalse}
+  \tfitem[0.5]{A statement that is true.}
+  \tfitem[0.5]{A statement that is false.}
+\end{truefalse}
+
+\end{document}
