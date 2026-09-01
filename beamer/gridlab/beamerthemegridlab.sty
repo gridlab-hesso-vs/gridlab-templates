@@ -233,8 +233,9 @@
       \fill[primary] (current page.south west) rectangle (current page.north east);
       \fill[secondary] ([yshift=-0.12\paperheight]current page.west)
         rectangle ([yshift=-0.125\paperheight]current page.east);
-      \node[anchor=west,text=white,font=\Large\bfseries]
-        at ([xshift=0.9cm]current page.west) {\secname};
+      \node[anchor=south west,text=white,font=\Large\bfseries,
+            text width=\dimexpr\paperwidth-2.6cm\relax,align=left,inner sep=0pt]
+        at ([xshift=0.9cm,yshift=-0.045\paperheight]current page.west) {\secname};
     \end{tikzpicture}%
   \end{frame}%
 }
@@ -292,8 +293,9 @@
     \begin{tikzpicture}[remember picture,overlay]
       \fill[secondary] ([yshift=-0.12\paperheight]current page.west)
         rectangle ([yshift=-0.125\paperheight]current page.east);
-      \node[anchor=west,text=white,font=\LARGE\bfseries]
-        at ([xshift=1.0cm]current page.west) {#1};
+      \node[anchor=south west,text=white,font=\LARGE\bfseries,
+            text width=\dimexpr\paperwidth-2.8cm\relax,align=left,inner sep=0pt]
+        at ([xshift=1.0cm,yshift=-0.045\paperheight]current page.west) {#1};
     \end{tikzpicture}%
   \end{frame}%
   \endgroup
