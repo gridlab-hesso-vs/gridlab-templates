@@ -2,17 +2,15 @@
 %  beamerthemegridlab.sty
 %  A clean, modern Beamer theme + GridLab/HES-SO utility macros, in one file.
 %
-%  Install once (macOS):  symlink or copy this file AND its figures/ folder
-%  into
-%      ~/Library/texmf/tex/latex/gridlab/
-%  then in any .tex, from anywhere, simply:
+%  Load it with
 %      \usetheme{gridlab}
-%  The theme's own images travel with it: they are found automatically from
-%  the install folder, so no figures/ folder is needed next to your .tex.
-%  See "ASSET PATHS" below.
+%  TeX finds it when this file and its logos sit next to your .tex (Overleaf,
+%  beamer-overleaf.zip), or when the gridlab/ folder is installed in your TeX
+%  tree (install.sh).  Fonts, booktabs, TikZ, pgfplots and the maths packages
+%  are loaded here, so the preamble needs nothing else.
 %
 %  Colours default to GridLab blue/orange. To rebrand, set them BEFORE
-%  loading the theme (hex, no '#'):
+%  \usetheme (hex, no '#'):
 %      \def\themeprimary{376092}    % main colour
 %      \def\themesecondary{ED7D31}  % accent colour
 %  Everything below the "UTILITIES" banner is convenience macros you can use
@@ -23,6 +21,9 @@
 % ---------------------------------------------------------------------------
 % Packages
 % ---------------------------------------------------------------------------
+\RequirePackage[T1]{fontenc}
+\RequirePackage{lmodern}
+\RequirePackage{booktabs}
 \RequirePackage{tikz}
 \usetikzlibrary{arrows.meta, shapes.geometric, positioning}
 \RequirePackage{xcolor}

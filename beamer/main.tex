@@ -1,66 +1,22 @@
 \documentclass[aspectratio=169,10pt]{beamer}
+\usetheme{gridlab}
 
-\usepackage[utf8]{inputenc}
-\usepackage[T1]{fontenc}
-\usepackage{lmodern}
-\usepackage{graphicx}
-\usepackage{booktabs}
-
-% GridLab theme + utility macros.  This line works in both places:
-%   * theme installed in your TeX tree (./install.sh)  -> \usetheme{gridlab}
-%   * gridlab/ folder sitting next to this file (Overleaf, or a zip you sent
-%     to someone) -> loaded straight from that folder, logos included.
-% To rebrand, set the colours (hex, no '#') BEFORE the line below:
-%   \def\themeprimary{376092}    % main colour   (default: GridLab blue)
-%   \def\themesecondary{ED7D31}  % accent colour (default: orange)
-\IfFileExists{gridlab/beamerthemegridlab.sty}
-  {\usepackage{gridlab/beamerthemegridlab}}
-  {\usetheme{gridlab}}
-
-% ---------------------------------------------------------------------------
-%  CUSTOMISE — title block
-% ---------------------------------------------------------------------------
-\title{Your Presentation Title}
+\title[Short Title]{Your Presentation Title}
 \subtitle{An optional subtitle goes here}
-\author{Prof. Fabrizio Sossan}
+\author[F. Sossan]{Prof. Fabrizio Sossan}
 \institute{Gridlab, HES-SO Valais-Wallis\\fabrizio.sossan@hevs.ch}
-\date{{\footnotesize Slides compiled on: \today}}
-
-% Short versions appear in the footer
-\renewcommand{\insertshortauthor}{F. Sossan}
-\renewcommand{\insertshorttitle}{Short Title}
-
-% ---------------------------------------------------------------------------
-%  CUSTOMISE — logos  (optional: the theme already ships these defaults)
-% ---------------------------------------------------------------------------
-% The theme's own logos live next to it in the install folder and are found by
-% bare file name — no figures/ folder is needed next to this .tex.  Uncomment
-% to override, or set a macro empty to switch that logo off.
-%
-% \def\titlelogos{\hfill\includegraphics[height=1.3cm]{logo_hesso.png}}
-% \def\titlebottomlogo{logo_gridlab.png}   % bottom-right of the title page
-% \def\titlebottomlogox{-1.1cm}            % its offset from the right edge
-% \def\titlebottomlogoheight{0.81cm}       % its height
-% \def\cornerlogo{}                        % small logo on every content slide
-%
-% Your own pictures still come from wherever you put them, as usual:
-% \graphicspath{{figures/}}
+\date{Slides compiled on \today}
 
 \begin{document}
 
-% ---- Title slide ----------------------------------------------------------
 \begin{frame}[plain,noframenumbering]
   \titlepage
 \end{frame}
 
-% ---- Optional table of contents ------------------------------------------
 \begin{frame}{Outline}
   \tableofcontents
 \end{frame}
 
-% ==========================================================================
-%  SLIDES — replace everything below with your content
-% ==========================================================================
 \section{First Section}
 
 \begin{frame}{A bullet slide}
@@ -110,11 +66,6 @@
   \end{columns}
 \end{frame}
 
-% ---- Closing slide --------------------------------------------------------
-% Headline, then the \author and \institute from the title block.
-%   \def\closingtitle{Thank you}     % change the headline for the whole deck
-%   \def\closingnote{Questions?}     % add a line underneath
-%   \closingslide[Merci !]           % or change it for this slide only
 \closingslide
 
 \end{document}

@@ -23,9 +23,9 @@ and logo settings.
 ../make-build.sh        # writes ../build/demo.pdf and copies it here
 ```
 
-Or `pdflatex demo.tex` twice from this directory.
+Or, with the theme installed (`../install.sh`), `pdflatex demo.tex` twice from
+this directory.
 
-`demo.tex` loads the theme by relative path
-(`\usepackage{../gridlab/beamerthemegridlab}`), so it has to be compiled from
-this directory. `../main.tex` uses the portable form instead and is the file
-to start a presentation from.
+`demo.tex` loads the theme with `\usetheme{gridlab}`, exactly like
+`../main.tex`; `../make-build.sh` points TeX at `../gridlab`, so it needs no
+installation. Start a presentation from `../main.tex`, not from this file.

@@ -2,28 +2,18 @@
 %  demo.tex — what the GridLab Beamer theme adds on top of plain Beamer.
 %  Each slide names the macro that produced it.
 %
-%  Build with ../make-build.sh, or: pdflatex demo.tex (twice).
+%  Build with ../make-build.sh (or pdflatex demo.tex twice, theme installed).
 %  To start a presentation, copy ../main.tex — not this file.
 % ===========================================================================
 \documentclass[aspectratio=169,10pt]{beamer}
 
-\usepackage[utf8]{inputenc}
-\usepackage[T1]{fontenc}
-\usepackage{lmodern}
-\usepackage{graphicx}
-\usepackage{booktabs}
+\usetheme{gridlab}
 
-% The demo sits one level below the package, so it points up at it.
-% A presentation uses the \IfFileExists form shown in ../main.tex.
-\usepackage{../gridlab/beamerthemegridlab}
-
-\title{The GridLab Beamer theme}
+\title[Theme feature tour]{The GridLab Beamer theme}
 \subtitle{What it gives you beyond plain Beamer}
-\author{Prof. Fabrizio Sossan}
+\author[F. Sossan]{Prof. Fabrizio Sossan}
 \institute{Gridlab, HES-SO Valais-Wallis\\fabrizio.sossan@hevs.ch}
-\date{{\footnotesize Slides compiled on: \today}}
-\renewcommand{\insertshortauthor}{F. Sossan}
-\renewcommand{\insertshorttitle}{Theme feature tour}
+\date{Slides compiled on \today}
 
 \begin{document}
 
@@ -233,7 +223,7 @@
     \toprule
     \textbf{Command} & \textbf{Changes} \\
     \midrule
-    \verb|\def\themeprimary{376092}| & main colour \emph{(before the theme is loaded)} \\
+    \verb|\def\themeprimary{376092}| & main colour \emph{(before \texttt{\textbackslash usetheme})} \\
     \verb|\def\themesecondary{ED7D31}| & accent colour \emph{(idem)} \\
     \midrule
     \verb|\def\titlelogos{...}| & logo row on the title page \\

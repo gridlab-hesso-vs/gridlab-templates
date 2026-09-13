@@ -15,21 +15,22 @@ provides.
 - In Overleaf, *New Project → Existing project (.zip)*, and drop the zip on it.
 - Edit `main.tex`.
 
-Alternatively, upload `main.tex` and the `gridlab/` folder instead.
+The zip holds `main.tex` next to the theme file and its two logos, so
+`\usetheme{gridlab}` finds them without any setup.
 
 ### With a local LaTeX distribution
 
-Copy this folder and compile:
+Unzip `beamer-overleaf.zip` where the talk should live and compile:
 
 ```sh
-cp -R . ~/somewhere/my-talk
+unzip beamer-overleaf.zip -d ~/somewhere/my-talk
 cd ~/somewhere/my-talk
 pdflatex main.tex && pdflatex main.tex     # twice: the frame counter
 ```
 
-The copy includes `gridlab/`, so nothing has to be installed first. This works
-the same on macOS (MacTeX), Linux (TeX Live) and Windows (MiKTeX or TeX
-Live).
+The theme file and logos sit next to `main.tex`, so nothing has to be installed
+first. This works the same on macOS (MacTeX), Linux (TeX Live) and Windows
+(MiKTeX or TeX Live).
 
 To keep the theme in one place rather than in every talk, install it once —
 that is, put the `gridlab` folder where TeX looks for packages, so
@@ -77,15 +78,12 @@ Copy-Item -Recurse gridlab "$env:USERPROFILE\texmf\tex\latex\"
 On either Windows distribution, `install.sh` also works as-is from Git Bash
 or WSL. Check the result with `kpsewhich beamerthemegridlab.sty`.
 
-Once installed, `main.tex` can be copied on its own, without the `gridlab`
-folder beside it.
-
-`main.tex` covers both cases:
+Once installed, `main.tex` can be copied on its own. Either way its preamble
+is just
 
 ```latex
-\IfFileExists{gridlab/beamerthemegridlab.sty}
-  {\usepackage{gridlab/beamerthemegridlab}}   % gridlab/ next to main.tex
-  {\usetheme{gridlab}}                        % installed in the TeX tree
+\documentclass[aspectratio=169,10pt]{beamer}
+\usetheme{gridlab}
 ```
 
 ## Contents
@@ -98,7 +96,7 @@ beamer/
 │   ├── logo_gridlab.png
 │   └── logo_hesso.png
 ├── demo/                 feature tour, source and PDF
-├── beamer-overleaf.zip   main.tex + gridlab/, ready for Overleaf
+├── beamer-overleaf.zip   main.tex + theme + logos, ready for Overleaf
 ├── install.sh            link gridlab/ into the TeX tree
 ├── make-build.sh         build the PDFs and the Overleaf zip
 └── build/                output, git-ignored
@@ -113,7 +111,7 @@ beamer/
 Writes `build/main.pdf`, `build/demo.pdf` and `build/beamer-overleaf.zip`, and
 refreshes the two build products tracked in the repo, `demo/demo.pdf` and
 `beamer-overleaf.zip`. Re-run it and commit those two whenever the theme or
-`main.tex` changes. No installation is required: `main.tex` finds the theme in
+`main.tex` changes. No installation is required: the script points TeX at
 `./gridlab`.
 
 ## What the theme provides
@@ -124,9 +122,13 @@ environments, the flowchart styles. Each slide names the macro that produced
 it, and the macros are listed in tables pairing each command with what it
 produces.
 
+The theme also loads `fontenc` (T1), `lmodern`, `booktabs`, TikZ, pgfplots and
+the maths packages, so a presentation's preamble needs nothing beyond
+`\usetheme{gridlab}`.
+
 ## Customise
 
-Colours, set before the theme is loaded (hex, no `#`):
+Colours, set before `\usetheme{gridlab}` (hex, no `#`):
 
 ```latex
 \def\themeprimary{376092}     % main colour
